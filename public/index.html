@@ -13,10 +13,10 @@
 
     <canvas id="bgCanvas"></canvas>
 
-    <video id="menuBg" autoplay muted loop playsinline>
+    <video id="menuBg" autoplay muted loop playsinline webkit-playsinline preload="auto">
         <source src="interface.mp4" type="video/mp4">
     </video>
-    <video id="gameBg" autoplay muted loop playsinline>
+    <video id="gameBg" autoplay muted loop playsinline webkit-playsinline preload="auto">
         <source src="gameplay.mp4" type="video/mp4">
     </video>
 
@@ -36,6 +36,9 @@
             <button class="btn" onclick="goToSettings()">⚙️ SETTINGS</button>
             <button class="btn" onclick="goToCredits()">🏆 CREDITS</button>
             <button class="btn btn-danger" onclick="exitGame()">❌ EXIT</button>
+        </div>
+        <div class="player-counter" id="playerCounter">
+            🎮 <span id="playerCount">0</span> players have played
         </div>
         <div class="connection-status" id="connectionStatus">🔌 Connecting...</div>
         <p class="version">v2.0 - Online</p>

@@ -18,6 +18,11 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 const rooms = {};
+// ============================================
+// Player Counter (Total players who opened the game)
+// ============================================
+let totalPlayers = 0;
+const playedSessions = new Set(); // To avoid counting the same person twice in same session
 
 function generateRoomId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -80,6 +85,17 @@ function startGame(room, roomId) {
 io.on('connection', (socket) => {
     console.log('✅ New client connected:', socket.id);
 
+    // ---- Player Counter ----
+    socket.on('registerPlayer', () => {
+        totalPlayers++;
+        console.log(`🎮 Total players: ${totalPlayers}`);
+        io.emit('playerCountUpdate', { count: totalPlayers });
+    });
+
+    // Send current count to the newly connected player
+    socket.emit('playerCountUpdate', { count: totalPlayers });
+
+
     // ---- Host Game (with name + rounds from start) ----
     socket.on('hostGame', (data) => {
         let roomId;
@@ -112,9 +128,9 @@ io.on('connection', (socket) => {
             socket.emit('roomNotFound');
             return;
         }
-        socket.emit('roomInfo', { 
-            roomId: data.roomId, 
-            hostName: room.hostName 
+        socket.emit('roomInfo', {
+            roomId: data.roomId,
+            hostName: room.hostName
         });
     });
 
@@ -154,7 +170,7 @@ io.on('connection', (socket) => {
         if (!room) return;
         room.guestName = data.name;
         console.log(`📝 Guest setup: ${data.name}`);
-        
+
         // Now both names are ready, start game
         if (room.hostName && room.guestName) {
             startGame(room, data.roomId);
@@ -165,12 +181,12 @@ io.on('connection', (socket) => {
     socket.on('leaveGame', (data) => {
         const room = rooms[data.roomId];
         if (!room) return;
-        
+
         const opponentId = (socket.id === room.host) ? room.guest : room.host;
         if (opponentId) {
             io.to(opponentId).emit('friendLeft');
         }
-        
+
         delete rooms[data.roomId];
         socket.leave(data.roomId);
         socket.roomId = null;
@@ -219,22 +235,22 @@ io.on('connection', (socket) => {
     socket.on('readyForNextRound', (data) => {
         const room = rooms[data.roomId];
         if (!room) return;
-        
+
         if (socket.isHost) room.roundOverReadyHost = true;
         else room.roundOverReadyGuest = true;
-        
+
         console.log(`✅ Ready: host=${room.roundOverReadyHost}, guest=${room.roundOverReadyGuest}`);
-        
+
         if (room.roundOverReadyHost && room.roundOverReadyGuest) {
             room.currentRound++;
             room.roundOverReadyHost = false;
             room.roundOverReadyGuest = false;
-            
+
             if (room.currentRound > room.totalRounds) {
                 let champion = 'tie';
                 if (room.score1 > room.score2) champion = 'X';
                 else if (room.score2 > room.score1) champion = 'O';
-                
+
                 console.log(`👑 MATCH OVER - Champion: ${champion}`);
                 io.to(data.roomId).emit('matchOver', {
                     champion, score1: room.score1, score2: room.score2, draws: room.draws
@@ -262,11 +278,11 @@ io.on('connection', (socket) => {
         if (socket.roomId && rooms[socket.roomId]) {
             const room = rooms[socket.roomId];
             const opponentId = (socket.id === room.host) ? room.guest : room.host;
-            
+
             if (opponentId && (room.gameActive || room.hostName)) {
                 io.to(opponentId).emit('friendLeft');
             }
-            
+
             if (room.host === socket.id) delete rooms[socket.roomId];
             else if (room.guest === socket.id) {
                 room.guest = null;

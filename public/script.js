@@ -72,6 +72,8 @@ function stopAllMusic() {
 // ============================================
 socket.on('connect', () => {
     console.log('✅ Connected:', socket.id);
+    // Register player for count
+    socket.emit('registerPlayer');
     const el = document.getElementById('connectionStatus');
     if (el) {
         el.textContent = '✅ Connected';
@@ -86,6 +88,16 @@ socket.on('disconnect', () => {
         el.textContent = '❌ Disconnected';
         el.classList.remove('connected');
         el.classList.add('disconnected');
+    }
+});
+
+// ============================================
+// Player Counter Update
+// ============================================
+socket.on('playerCountUpdate', (data) => {
+    const counterEl = document.getElementById('playerCount');
+    if (counterEl) {
+        counterEl.textContent = data.count;
     }
 });
 
@@ -662,9 +674,9 @@ function startFireworks(canvasId) {
     let lastSpawn = 0;
     const colors = ['#ff5078', '#50c8ff', '#64ff96', '#ffd700', '#ff8c42', '#ff69b4', '#87ceeb', '#ee82ee'];
 
-    // Fewer particles on mobile
-    const spawnCount = isMobile ? 15 : (30 + Math.floor(Math.random() * 20));
-    const spawnInterval = isMobile ? 600 : 400;
+    // Minimum particles for celebration + performance
+    const spawnCount = isMobile ? 8 : 25;
+    const spawnInterval = isMobile ? 1000 : 500;
 
     function spawn() {
         const x = Math.random() * canvas.width;
@@ -742,8 +754,8 @@ function stopFireworks(canvasId) {
         { fill: '#50c8ff', stroke: '#2ea8df' }
     ];
 
-    // Fewer petals on mobile (8) but still beautiful, full petals on PC (30)
-    const numPetals = isMobile ? 8 : 30;
+    // Minimum petals for beauty + performance balance
+    const numPetals = isMobile ? 6 : 25;
     console.log('🌸 Sakura petals:', numPetals, isMobile ? '(mobile)' : '(PC)');
 
     for (let i = 0; i < numPetals; i++) {
@@ -824,3 +836,40 @@ document.addEventListener('visibilitychange', () => {
         }
     }
 });
+
+// ============================================
+// Video Autoplay Fallback (Mobile)
+// ============================================
+function initVideos() {
+    const menuBg = document.getElementById('menuBg');
+    const gameBg = document.getElementById('gameBg');
+    
+    [menuBg, gameBg].forEach(video => {
+        if (!video) return;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+    });
+    
+    if (menuBg) menuBg.play().catch(() => {});
+    if (gameBg) gameBg.play().catch(() => {});
+}
+
+window.addEventListener('load', () => {
+    setTimeout(initVideos, 500);
+});
+
+// First user interaction (mobile requires this)
+document.addEventListener('touchstart', () => {
+    const menuBg = document.getElementById('menuBg');
+    const gameBg = document.getElementById('gameBg');
+    if (menuBg) menuBg.play().catch(() => {});
+    if (gameBg) gameBg.play().catch(() => {});
+}, { once: true });
+
+document.addEventListener('click', () => {
+    const menuBg = document.getElementById('menuBg');
+    const gameBg = document.getElementById('gameBg');
+    if (menuBg) menuBg.play().catch(() => {});
+    if (gameBg) gameBg.play().catch(() => {});
+}, { once: true });
