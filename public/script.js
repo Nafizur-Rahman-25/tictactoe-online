@@ -37,7 +37,7 @@ function playSound(name) {
     if (snd) {
         const clone = snd.cloneNode();
         clone.volume = 0.8;
-        clone.play().catch(() => {});
+        clone.play().catch(() => { });
     }
 }
 
@@ -48,13 +48,13 @@ function switchMusic(type) {
     const gMusic = document.getElementById('gameplayMusic');
     if (iMusic) { iMusic.pause(); iMusic.currentTime = 0; }
     if (gMusic) { gMusic.pause(); gMusic.currentTime = 0; }
-    
+
     if (type === 'interface' && iMusic) {
         iMusic.volume = 0.35;
-        iMusic.play().catch(() => {});
+        iMusic.play().catch(() => { });
     } else if (type === 'gameplay' && gMusic) {
         gMusic.volume = 0.35;
-        gMusic.play().catch(() => {});
+        gMusic.play().catch(() => { });
     }
     currentMusic = type;
 }
@@ -96,7 +96,7 @@ function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const target = document.getElementById(id);
     if (target) target.classList.add('active');
-    
+
     if (id === 'screen-game') {
         document.body.classList.add('in-game');
         document.body.classList.remove('in-menu');
@@ -217,19 +217,19 @@ function setRounds(n) {
 function submitHostSetup() {
     const name = document.getElementById('hostNameInput').value.trim();
     let roundsVal = parseInt(document.getElementById('roundsInput').value);
-    
+
     if (!name) {
         alert('Please enter your name!');
         return;
     }
     if (isNaN(roundsVal) || roundsVal < 1) roundsVal = 1;
     if (roundsVal > 100) roundsVal = 100;
-    
+
     playSound('click');
     myName = name;
     mySymbol = 'X';
     totalRounds = roundsVal;
-    
+
     console.log('📤 Creating room with host name:', myName);
     socket.emit('hostGame', { name: myName, rounds: totalRounds });
 }
@@ -297,7 +297,7 @@ function joinWithCode() {
         alert('Please enter a room code or link!');
         return;
     }
-    
+
     let roomCode = input;
     if (input.includes('room=')) {
         const match = input.match(/room=([A-Z0-9]+)/i);
@@ -305,12 +305,12 @@ function joinWithCode() {
     } else {
         roomCode = input.toUpperCase();
     }
-    
+
     playSound('click');
     currentRoomId = roomCode;
     isHost = false;
     splashCompleted = true;
-    
+
     socket.emit('checkRoom', { roomId: roomCode });
     showScreen('screen-invitation');
 }
@@ -413,7 +413,7 @@ socket.on('gameStart', (data) => {
     draws = data.draws || 0;
     currentTurn = 'X';
     gameStarted = true;
-    
+
     if (mySymbol === 'X') {
         document.getElementById('player1Name').textContent = myName;
         document.getElementById('player2Name').textContent = opponentName;
@@ -421,7 +421,7 @@ socket.on('gameStart', (data) => {
         document.getElementById('player1Name').textContent = opponentName;
         document.getElementById('player2Name').textContent = myName;
     }
-    
+
     resetBoard();
     updateGameUI();
     showScreen('screen-game');
@@ -436,12 +436,12 @@ document.querySelectorAll('.cell').forEach(cell => {
         if (!gameActive) return;
         if (board[index] !== '') return;
         if (currentTurn !== mySymbol) return;
-        
+
         playSound('place');
         board[index] = mySymbol;
         cell.textContent = mySymbol;
         cell.classList.add(mySymbol.toLowerCase());
-        
+
         socket.emit('makeMove', { roomId: currentRoomId, index, symbol: mySymbol });
     });
 });
@@ -459,7 +459,7 @@ socket.on('turnUpdate', (data) => {
     currentTurn = data.turn;
     board = data.board;
     gameActive = data.gameActive;
-    
+
     board.forEach((val, i) => {
         const cell = document.querySelector(`.cell[data-index="${i}"]`);
         if (cell) {
@@ -491,42 +491,42 @@ function showRoundOver(data) {
     const scoreEl = document.getElementById('roundScore');
     const nextEl = document.getElementById('roundNextInfo');
     const readyEl = document.getElementById('readyStatus');
-    
+
     title.textContent = `ROUND ${data.currentRound} RESULT`;
-    
+
     if (data.winner === 'draw') {
         winnerEl.textContent = "It's a DRAW!";
         winnerEl.style.color = 'var(--subtext-color)';
         loserEl.textContent = "Both played well!";
         playSound('draw');
     } else {
-        const winnerName = data.winner === 'X' ? 
-            document.getElementById('player1Name').textContent : 
+        const winnerName = data.winner === 'X' ?
+            document.getElementById('player1Name').textContent :
             document.getElementById('player2Name').textContent;
-        const loserName = data.winner === 'X' ? 
-            document.getElementById('player2Name').textContent : 
+        const loserName = data.winner === 'X' ?
+            document.getElementById('player2Name').textContent :
             document.getElementById('player1Name').textContent;
         const winnerColor = data.winner === 'X' ? 'var(--accent-x)' : 'var(--accent-o)';
-        
+
         winnerEl.textContent = `${winnerName} Wins!`;
         winnerEl.style.color = winnerColor;
         loserEl.textContent = `Who lost: ${loserName}`;
         playSound('win');
     }
-    
+
     const p1Name = document.getElementById('player1Name').textContent;
     const p2Name = document.getElementById('player2Name').textContent;
     scoreEl.textContent = `${p1Name}  ${score1} - ${score2}  ${p2Name}`;
-    
+
     if (data.isLastRound) {
         nextEl.textContent = "Final round done!";
     } else {
         nextEl.textContent = `Next: Round ${data.currentRound + 1} of ${totalRounds}`;
     }
-    
+
     readyEl.textContent = 'Click anywhere or press SPACE to continue';
     readyEl.style.color = 'var(--gold)';
-    
+
     showScreen('screen-round-over');
     setupFireworks('fireworksCanvas');
     startFireworks('fireworksCanvas');
@@ -563,15 +563,15 @@ socket.on('startNextRound', (data) => {
 socket.on('matchOver', (data) => {
     stopFireworks('fireworksCanvas');
     stopFireworks('fireworksCanvas2');
-    
+
     const champEl = document.getElementById('matchChampion');
     const scoreEl = document.getElementById('matchScore');
     const drawsEl = document.getElementById('matchDraws');
     const loserEl = document.getElementById('matchLoser');
-    
+
     const p1Name = document.getElementById('player1Name').textContent;
     const p2Name = document.getElementById('player2Name').textContent;
-    
+
     if (data.champion === 'tie') {
         champEl.textContent = `${p1Name} & ${p2Name}`;
         champEl.style.color = 'var(--success)';
@@ -581,16 +581,16 @@ socket.on('matchOver', (data) => {
         const champName = data.champion === 'X' ? p1Name : p2Name;
         const loserName = data.champion === 'X' ? p2Name : p1Name;
         const champColor = data.champion === 'X' ? 'var(--accent-x)' : 'var(--accent-o)';
-        
+
         champEl.textContent = champName;
         champEl.style.color = champColor;
         loserEl.textContent = `Who lost: ${loserName}`;
         playSound('win');
     }
-    
+
     scoreEl.textContent = `${data.score1} - ${data.score2}`;
     drawsEl.textContent = `Draws: ${data.draws}`;
-    
+
     showScreen('screen-match-over');
     setupFireworks('fireworksCanvas2');
     startFireworks('fireworksCanvas2');
@@ -624,13 +624,13 @@ function updateGameUI() {
     document.getElementById('player2Score').textContent = `Score: ${score2}`;
     document.getElementById('roundInfo').textContent = `Round ${currentRound} / ${totalRounds}`;
     document.getElementById('drawsInfo').textContent = `Draws: ${draws}`;
-    
+
     const status = document.getElementById('gameStatus');
     status.className = 'status-text';
-    
+
     const p1 = document.getElementById('player1Name').textContent;
     const p2 = document.getElementById('player2Name').textContent;
-    
+
     if (currentTurn === 'X') {
         status.textContent = `${p1}'s Turn`;
         status.classList.add('turn-x');
@@ -657,15 +657,15 @@ function startFireworks(canvasId) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    
+
     let particles = [];
     let lastSpawn = 0;
     const colors = ['#ff5078', '#50c8ff', '#64ff96', '#ffd700', '#ff8c42', '#ff69b4', '#87ceeb', '#ee82ee'];
-    
+
     // Fewer particles on mobile
     const spawnCount = isMobile ? 15 : (30 + Math.floor(Math.random() * 20));
     const spawnInterval = isMobile ? 600 : 400;
-    
+
     function spawn() {
         const x = Math.random() * canvas.width;
         const y = 100 + Math.random() * (canvas.height * 0.5);
@@ -682,11 +682,11 @@ function startFireworks(canvasId) {
             });
         }
     }
-    
+
     function animate(timestamp) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (timestamp - lastSpawn > spawnInterval) { spawn(); lastSpawn = timestamp; }
-        
+
         for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
             p.x += p.vx;
@@ -694,7 +694,7 @@ function startFireworks(canvasId) {
             p.vy += 0.15;
             p.life -= 0.016;
             if (p.life <= 0) { particles.splice(i, 1); continue; }
-            
+
             ctx.globalAlpha = Math.min(1, p.life);
             ctx.fillStyle = p.color;
             ctx.beginPath();
@@ -726,14 +726,14 @@ function stopFireworks(canvasId) {
     const canvas = document.getElementById('bgCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    
+
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
     resize();
     window.addEventListener('resize', resize);
-    
+
     const petals = [];
     const colors = [
         { fill: '#ffb7d5', stroke: '#ff8cb8' },
@@ -741,10 +741,11 @@ function stopFireworks(canvasId) {
         { fill: '#ffc0d5', stroke: '#ff99bb' },
         { fill: '#50c8ff', stroke: '#2ea8df' }
     ];
-    
-    // Fewer petals on mobile for smooth performance
-    const numPetals = isMobile ? 12 : 30;
-    
+
+    // Fewer petals on mobile (8) but still beautiful, full petals on PC (30)
+    const numPetals = isMobile ? 8 : 30;
+    console.log('🌸 Sakura petals:', numPetals, isMobile ? '(mobile)' : '(PC)');
+
     for (let i = 0; i < numPetals; i++) {
         petals.push({
             x: Math.random() * canvas.width,
@@ -760,7 +761,7 @@ function stopFireworks(canvasId) {
             alpha: 0.5 + Math.random() * 0.4
         });
     }
-    
+
     function drawPetal(p) {
         ctx.save();
         ctx.translate(p.x, p.y);
@@ -770,7 +771,7 @@ function stopFireworks(canvasId) {
         ctx.strokeStyle = p.color.stroke;
         ctx.lineWidth = 0.8;
         const s = p.size;
-        
+
         for (let i = 0; i < 4; i++) {
             ctx.save();
             ctx.rotate((Math.PI / 2) * i);
@@ -784,7 +785,7 @@ function stopFireworks(canvasId) {
         }
         ctx.restore();
     }
-    
+
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         petals.forEach(p => {
@@ -792,11 +793,11 @@ function stopFireworks(canvasId) {
             p.swayPhase += p.swaySpeed;
             p.x += p.speedX + Math.sin(p.swayPhase) * 0.5;
             p.rotation += p.rotationSpeed;
-            
+
             if (p.y > canvas.height + 30) { p.y = -30; p.x = Math.random() * canvas.width; }
             if (p.x < -30) p.x = canvas.width + 30;
             if (p.x > canvas.width + 30) p.x = -30;
-            
+
             drawPetal(p);
         });
         requestAnimationFrame(animate);
@@ -810,16 +811,16 @@ function stopFireworks(canvasId) {
 document.addEventListener('visibilitychange', () => {
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
-    
+
     if (document.hidden) {
         if (menuBg) menuBg.pause();
         if (gameBg) gameBg.pause();
     } else {
         if (menuBg && !document.body.classList.contains('in-game')) {
-            menuBg.play().catch(() => {});
+            menuBg.play().catch(() => { });
         }
         if (gameBg && document.body.classList.contains('in-game')) {
-            gameBg.play().catch(() => {});
+            gameBg.play().catch(() => { });
         }
     }
 });
