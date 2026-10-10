@@ -36,7 +36,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -64,7 +65,8 @@ body {
     pointer-events: none;
 }
 
-#menuBg, #gameBg {
+#menuBg,
+#gameBg {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -80,13 +82,31 @@ body {
     transition: opacity 0.3s ease;
 }
 
-#menuBg { opacity: 0; filter: brightness(0.75); }
-#gameBg { opacity: 0; filter: brightness(0.55); }
+#menuBg {
+    opacity: 0;
+    filter: brightness(0.75);
+}
 
-body.in-menu #menuBg { opacity: 0.85; }
-body.in-menu #gameBg { opacity: 0; }
-body.in-game #gameBg { opacity: 0.85; }
-body.in-game #menuBg { opacity: 0; }
+#gameBg {
+    opacity: 0;
+    filter: brightness(0.55);
+}
+
+body.in-menu #menuBg {
+    opacity: 0.85;
+}
+
+body.in-menu #gameBg {
+    opacity: 0;
+}
+
+body.in-game #gameBg {
+    opacity: 0.85;
+}
+
+body.in-game #menuBg {
+    opacity: 0;
+}
 
 /* ============================================ */
 /* Screens */
@@ -111,8 +131,13 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* ============================================ */
@@ -161,8 +186,15 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes titlePulse {
-    0%, 100% { text-shadow: 0 0 10px var(--accent-o), 0 0 20px var(--accent-o), 0 0 40px var(--accent-o); }
-    50% { text-shadow: 0 0 20px var(--accent-o), 0 0 40px var(--accent-o), 0 0 80px var(--accent-o); }
+
+    0%,
+    100% {
+        text-shadow: 0 0 10px var(--accent-o), 0 0 20px var(--accent-o), 0 0 40px var(--accent-o);
+    }
+
+    50% {
+        text-shadow: 0 0 20px var(--accent-o), 0 0 40px var(--accent-o), 0 0 80px var(--accent-o);
+    }
 }
 
 /* ============================================ */
@@ -184,8 +216,15 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes splashBlink {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 .splash-pulse {
@@ -198,8 +237,17 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes splashPulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.15); opacity: 0.7; }
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.7;
+    }
 }
 
 /* ============================================ */
@@ -242,12 +290,15 @@ body.in-game #menuBg { opacity: 0; }
     box-shadow: 0 0 25px rgba(80, 200, 255, 0.7);
 }
 
-.btn:active { transform: scale(0.98); }
+.btn:active {
+    transform: scale(0.98);
+}
 
 .btn-secondary {
     background-color: rgba(30, 100, 50, 0.85);
     border-color: var(--success);
 }
+
 .btn-secondary:hover {
     background-color: #2e9650;
     box-shadow: 0 0 25px rgba(100, 255, 150, 0.7);
@@ -257,6 +308,7 @@ body.in-game #menuBg { opacity: 0; }
     background-color: rgba(80, 40, 30, 0.85);
     border-color: var(--danger);
 }
+
 .btn-danger:hover {
     background-color: #c83c50;
     box-shadow: 0 0 25px rgba(200, 60, 80, 0.7);
@@ -266,6 +318,7 @@ body.in-game #menuBg { opacity: 0; }
     background-color: rgba(30, 100, 50, 0.9);
     border-color: var(--success);
 }
+
 .btn-yes:hover {
     background-color: #2e9650;
     box-shadow: 0 0 30px rgba(100, 255, 150, 0.8);
@@ -275,6 +328,7 @@ body.in-game #menuBg { opacity: 0; }
     background-color: rgba(80, 40, 30, 0.9);
     border-color: var(--danger);
 }
+
 .btn-no:hover {
     background-color: #c83c50;
     box-shadow: 0 0 30px rgba(200, 60, 80, 0.8);
@@ -298,8 +352,19 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 20px var(--accent-o); }
-    50% { transform: scale(1.3); opacity: 0.5; box-shadow: 0 0 40px var(--accent-o); }
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 20px var(--accent-o);
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 0.5;
+        box-shadow: 0 0 40px var(--accent-o);
+    }
 }
 
 /* ============================================ */
@@ -358,8 +423,15 @@ body.in-game #menuBg { opacity: 0; }
     z-index: 3;
 }
 
-.connection-status.connected { border-color: var(--success); color: var(--success); }
-.connection-status.disconnected { border-color: var(--danger); color: var(--danger); }
+.connection-status.connected {
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.connection-status.disconnected {
+    border-color: var(--danger);
+    color: var(--danger);
+}
 
 .version {
     position: fixed;
@@ -381,7 +453,9 @@ body.in-game #menuBg { opacity: 0; }
     letter-spacing: 2px;
 }
 
-.invitation-icon { margin: 20px 0; }
+.invitation-icon {
+    margin: 20px 0;
+}
 
 .icon-pulse {
     font-size: 5rem;
@@ -390,8 +464,17 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes iconPulse {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--accent-o)); }
-    50% { transform: scale(1.2); filter: drop-shadow(0 0 40px var(--accent-o)); }
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 20px var(--accent-o));
+    }
+
+    50% {
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 40px var(--accent-o));
+    }
 }
 
 .invitation-buttons {
@@ -493,8 +576,13 @@ body.in-game #menuBg { opacity: 0; }
     backdrop-filter: blur(5px);
 }
 
-.player-info { min-width: 160px; }
-.player2-info { text-align: right; }
+.player-info {
+    min-width: 160px;
+}
+
+.player2-info {
+    text-align: right;
+}
 
 .player-name {
     font-size: 1.6rem;
@@ -503,14 +591,30 @@ body.in-game #menuBg { opacity: 0; }
     letter-spacing: 2px;
 }
 
-.player-name-x { color: var(--accent-x); }
-.player-name-o { color: var(--accent-o); }
+.player-name-x {
+    color: var(--accent-x);
+}
 
-.player-score { font-size: 1.1rem; font-weight: bold; }
-.score-x { color: var(--accent-x); }
-.score-o { color: var(--accent-o); }
+.player-name-o {
+    color: var(--accent-o);
+}
 
-.center-info { text-align: center; }
+.player-score {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.score-x {
+    color: var(--accent-x);
+}
+
+.score-o {
+    color: var(--accent-o);
+}
+
+.center-info {
+    text-align: center;
+}
 
 .round-info {
     font-size: 1.4rem;
@@ -569,9 +673,17 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes popIn {
-    0% { transform: scale(0); }
-    70% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(0);
+    }
+
+    70% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .status-text {
@@ -583,8 +695,15 @@ body.in-game #menuBg { opacity: 0; }
     margin-bottom: 10px;
 }
 
-.status-text.turn-x { color: var(--accent-x); text-shadow: 0 0 20px var(--accent-x); }
-.status-text.turn-o { color: var(--accent-o); text-shadow: 0 0 20px var(--accent-o); }
+.status-text.turn-x {
+    color: var(--accent-x);
+    text-shadow: 0 0 20px var(--accent-x);
+}
+
+.status-text.turn-o {
+    color: var(--accent-o);
+    text-shadow: 0 0 20px var(--accent-o);
+}
 
 /* Small Exit Button in Game */
 .small-exit-btn {
@@ -599,7 +718,8 @@ body.in-game #menuBg { opacity: 0; }
 /* ============================================ */
 /* Round/Match Over */
 /* ============================================ */
-#fireworksCanvas, #fireworksCanvas2 {
+#fireworksCanvas,
+#fireworksCanvas2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -633,8 +753,13 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes winnerGlow {
-    from { text-shadow: 0 0 20px currentColor; }
-    to { text-shadow: 0 0 40px currentColor, 0 0 80px currentColor; }
+    from {
+        text-shadow: 0 0 20px currentColor;
+    }
+
+    to {
+        text-shadow: 0 0 40px currentColor, 0 0 80px currentColor;
+    }
 }
 
 .loser-info {
@@ -667,8 +792,15 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 .match-over-title {
@@ -871,10 +1003,20 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 @keyframes counterPulse {
-    0%, 100% { box-shadow: 0 0 20px rgba(80, 200, 255, 0.3); }
-    50% { box-shadow: 0 0 30px rgba(80, 200, 255, 0.6); }
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(80, 200, 255, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(80, 200, 255, 0.6);
+    }
 }
 
+/* ============================================ */
+/* Mobile - Single Media Query */
+/* ============================================ */
 /* ============================================ */
 /* Mobile - Single Media Query */
 /* ============================================ */
@@ -886,21 +1028,33 @@ body.in-game #menuBg { opacity: 0; }
         padding: 15px;
     }
     
-    /* Background Videos */
+    /* Background Videos - DISABLED on mobile for performance */
     #menuBg, #gameBg {
-        width: 100vw;
-        height: 100vh;
-        min-width: 100vw;
-        min-height: 100vh;
-        transform: translate(-50%, -50%) scale(1);
-        object-fit: cover;
-        object-position: center;
+        display: none !important;
     }
     
-    /* Sakura Canvas */
+    /* Beautiful Animated Gradient Background */
+    body {
+        background: linear-gradient(135deg, 
+            #0f0f1e 0%, 
+            #1a1a35 25%,
+            #231a35 50%,
+            #1a1a35 75%,
+            #0f0f1e 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    /* Sakura + Stars Canvas - Full visibility */
     #bgCanvas {
         width: 100vw;
         height: 100vh;
+        opacity: 1;
     }
     
     /* Remove backdrop-filter for performance */
@@ -916,27 +1070,45 @@ body.in-game #menuBg { opacity: 0; }
         padding: 10px;
     }
     
-    /* Game Header */
+    /* Game Header - Fix name display */
     .game-header {
-        padding: 12px 18px;
+        padding: 10px 12px;
         margin-bottom: 12px;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .player-info {
+        min-width: auto;
+        flex: 1;
+    }
+    
+    .player2-info {
+        text-align: right;
+        flex: 1;
+    }
+    
+    .center-info {
+        flex: 1;
+        min-width: 80px;
     }
     
     .player-name {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         margin-bottom: 5px;
     }
     
     .player-score {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
     
     .round-info {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .draws-info {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         margin-top: 4px;
     }
     

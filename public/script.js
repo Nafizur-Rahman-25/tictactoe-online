@@ -674,9 +674,10 @@ function startFireworks(canvasId) {
     let lastSpawn = 0;
     const colors = ['#ff5078', '#50c8ff', '#64ff96', '#ffd700', '#ff8c42', '#ff69b4', '#87ceeb', '#ee82ee'];
 
-    // Minimum particles for celebration + performance
-    const spawnCount = isMobile ? 8 : 25;
-    const spawnInterval = isMobile ? 1000 : 500;
+    // More particles on mobile now (video is off) - celebration effect
+    const spawnCount = isMobile ? 12 : 25;
+    const spawnInterval = isMobile ? 800 : 500;
+
 
     function spawn() {
         const x = Math.random() * canvas.width;
@@ -732,7 +733,7 @@ function stopFireworks(canvasId) {
 }
 
 // ============================================
-// Sakura Background (with mobile optimization)
+// Sakura + Stars Background (Mobile & PC optimized)
 // ============================================
 (function initBackground() {
     const canvas = document.getElementById('bgCanvas');
@@ -746,16 +747,18 @@ function stopFireworks(canvasId) {
     resize();
     window.addEventListener('resize', resize);
 
+    // ============================================
+    // Sakura Petals
+    // ============================================
     const petals = [];
-    const colors = [
+    const petalColors = [
         { fill: '#ffb7d5', stroke: '#ff8cb8' },
         { fill: '#ffd1e0', stroke: '#ffa0c0' },
         { fill: '#ffc0d5', stroke: '#ff99bb' },
         { fill: '#50c8ff', stroke: '#2ea8df' }
     ];
 
-    // Minimum petals for beauty + performance balance
-    const numPetals = isMobile ? 6 : 25;
+    const numPetals = isMobile ? 12 : 25;
     console.log('🌸 Sakura petals:', numPetals, isMobile ? '(mobile)' : '(PC)');
 
     for (let i = 0; i < numPetals; i++) {
@@ -769,7 +772,7 @@ function stopFireworks(canvasId) {
             rotationSpeed: -0.02 + Math.random() * 0.04,
             swayPhase: Math.random() * Math.PI * 2,
             swaySpeed: 0.02 + Math.random() * 0.03,
-            color: colors[Math.floor(Math.random() * colors.length)],
+            color: petalColors[Math.floor(Math.random() * petalColors.length)],
             alpha: 0.5 + Math.random() * 0.4
         });
     }
@@ -798,8 +801,63 @@ function stopFireworks(canvasId) {
         ctx.restore();
     }
 
+    // ============================================
+    // Stars (Glowing dots for mobile & PC)
+    // ============================================
+    const stars = [];
+    const numStars = isMobile ? 40 : 30;
+    const starColors = ['#50c8ff', '#ff5078', '#ffffff', '#ffd700', '#a070ff'];
+
+    for (let i = 0; i < numStars; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: 0.5 + Math.random() * 1.5,
+            color: starColors[Math.floor(Math.random() * starColors.length)],
+            alpha: 0.2 + Math.random() * 0.5,
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: 0.02 + Math.random() * 0.03,
+            speedY: (Math.random() - 0.5) * 0.15,
+            speedX: (Math.random() - 0.5) * 0.1
+        });
+    }
+
+    function drawStar(star) {
+        star.pulse += star.pulseSpeed;
+        star.y += star.speedY;
+        star.x += star.speedX;
+
+        const pulsingAlpha = star.alpha + Math.sin(star.pulse) * 0.25;
+
+        // Wrap around
+        if (star.y < -10) star.y = canvas.height + 10;
+        if (star.y > canvas.height + 10) star.y = -10;
+        if (star.x < -10) star.x = canvas.width + 10;
+        if (star.x > canvas.width + 10) star.x = -10;
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = star.color;
+        ctx.globalAlpha = Math.max(0.1, Math.min(0.9, pulsingAlpha));
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = star.color;
+        ctx.fill();
+    }
+
+    // ============================================
+    // Combined Animation Loop (Stars + Petals together)
+    // ============================================
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Draw Stars (background layer)
+        stars.forEach(star => drawStar(star));
+
+        // Reset shadow before petals
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1;
+
+        // 2. Draw Petals (foreground layer)
         petals.forEach(p => {
             p.y += p.speedY;
             p.swayPhase += p.swaySpeed;
@@ -812,10 +870,12 @@ function stopFireworks(canvasId) {
 
             drawPetal(p);
         });
+
         requestAnimationFrame(animate);
     }
     animate();
 })();
+
 
 // ============================================
 // Mobile Performance: Pause videos when tab is hidden
@@ -843,16 +903,16 @@ document.addEventListener('visibilitychange', () => {
 function initVideos() {
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
-    
+
     [menuBg, gameBg].forEach(video => {
         if (!video) return;
         video.muted = true;
         video.loop = true;
         video.playsInline = true;
     });
-    
-    if (menuBg) menuBg.play().catch(() => {});
-    if (gameBg) gameBg.play().catch(() => {});
+
+    if (menuBg) menuBg.play().catch(() => { });
+    if (gameBg) gameBg.play().catch(() => { });
 }
 
 window.addEventListener('load', () => {
@@ -863,13 +923,13 @@ window.addEventListener('load', () => {
 document.addEventListener('touchstart', () => {
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
-    if (menuBg) menuBg.play().catch(() => {});
-    if (gameBg) gameBg.play().catch(() => {});
+    if (menuBg) menuBg.play().catch(() => { });
+    if (gameBg) gameBg.play().catch(() => { });
 }, { once: true });
 
 document.addEventListener('click', () => {
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
-    if (menuBg) menuBg.play().catch(() => {});
-    if (gameBg) gameBg.play().catch(() => {});
+    if (menuBg) menuBg.play().catch(() => { });
+    if (gameBg) gameBg.play().catch(() => { });
 }, { once: true });
