@@ -857,3 +857,8 @@ body.in-game #menuBg { opacity: 0; }
         font-size: 3rem;
     }
 }
+
+.death-font {
+    font-family: 'Death', Arial, sans-serif !important;
+    font-weight: normal !important;
+}
