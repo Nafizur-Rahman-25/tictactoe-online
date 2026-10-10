@@ -861,6 +861,8 @@ body.in-game #menuBg { opacity: 0; }
 .death-font {
     font-family: 'Death', Arial, sans-serif !important;
     font-weight: normal !important;
+    font-size: 1.5rem !important;
+    letter-spacing: 2px !important;
 }
 
 .github a {
@@ -871,4 +873,22 @@ body.in-game #menuBg { opacity: 0; }
 .github a:hover {
     color: var(--accent-o);
     text-decoration: underline;
+}
+
+/* ============================================ */
+/* Credits Screen - Beautiful Font Mix */
+/* ============================================ */
+.credits-font-1 {
+    font-family: 'BlackUnicorn', Arial, sans-serif !important;
+    font-size: 1.4rem !important;
+    letter-spacing: 3px !important;
+    color: var(--subtext-color) !important;
+}
+
+.credits-font-2 {
+    font-family: 'Death', Arial, sans-serif !important;
+    font-size: 1.4rem !important;
+    letter-spacing: 2px !important;
+    color: var(--text-color) !important;
+    margin: 8px 0 !important;
 }
