@@ -218,7 +218,8 @@ This project is licensed under the MIT License — see the LICENSE file for deta
 
 **Md. Nafizur Rahman Nafiz**
 
-Department of Computer Science and Engineering
+Department of Computer Science and Engineering  
+
 Chittagong University of Engineering and Technology (CUET)
 
 GitHub: https://github.com/Nafizur-Rahman-25
