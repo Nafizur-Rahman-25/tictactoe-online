@@ -73,6 +73,7 @@ body {
     min-width: 110vw;
     min-height: 110vh;
     object-fit: cover;
+    object-position: center;
     transform: translate(-50%, -50%) scale(1.05);
     z-index: 0;
     pointer-events: none;
@@ -875,112 +876,103 @@ body.in-game #menuBg { opacity: 0; }
 }
 
 /* ============================================ */
-/* Mobile Performance Optimization */
+/* Mobile - Single Media Query */
 /* ============================================ */
 @media (max-width: 768px) {
-    /* Enable videos with lower brightness */
-    #menuBg, #gameBg {
-        display: block !important;
-    }
-    
-    #menuBg { filter: brightness(0.7) !important; }
-    #gameBg { filter: brightness(0.5) !important; }
-    
-    /* Use dynamic viewport height */
+    /* Full-screen mobile viewport */
     .screen {
-        height: 100dvh !important;
-        min-height: 100dvh !important;
-        padding: 15px !important;
-        overflow: visible !important;
+        height: 100vh;
+        min-height: 100vh;
+        padding: 15px;
     }
     
-    /* Sakura canvas */
+    /* Background Videos */
+    #menuBg, #gameBg {
+        width: 100vw;
+        height: 100vh;
+        min-width: 100vw;
+        min-height: 100vh;
+        transform: translate(-50%, -50%) scale(1);
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    /* Sakura Canvas */
     #bgCanvas {
-        height: 100dvh !important;
-        width: 100vw !important;
-        opacity: 0.85;
+        width: 100vw;
+        height: 100vh;
     }
     
-    /* Fallback gradient */
-    body.in-menu, body.in-game {
-        background: linear-gradient(135deg, #0f0f1e 0%, #1a1a35 100%);
-    }
-    
-    /* Remove backdrop-filter (heavy on mobile) */
+    /* Remove backdrop-filter for performance */
     .btn, .game-header, .board, .overlay-content,
     .setting-row, .link-box input {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
-    
-    /* Simpler hover */
-    .btn:hover {
-        box-shadow: 0 0 15px rgba(80, 200, 255, 0.5);
-        transform: scale(1.02);
-    }
-    
-    .cell:hover {
-        box-shadow: 0 0 12px rgba(80, 200, 255, 0.4);
-        transform: scale(1.02);
-    }
-    
-    /* Title sizes */
-    .title { font-size: 2.5rem !important; }
-    .title-small { font-size: 1.6rem !important; }
     
     /* Game Screen Layout */
     #screen-game {
-        justify-content: flex-start !important;
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
-        overflow-y: auto !important;
+        justify-content: center;
+        padding: 10px;
     }
     
-    #screen-game .game-header {
-        padding: 8px 12px !important;
-        margin-bottom: 8px !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
+    /* Game Header */
+    .game-header {
+        padding: 12px 18px;
+        margin-bottom: 12px;
     }
     
-    #screen-game .player-info { min-width: auto !important; }
-    #screen-game .player-name {
-        font-size: 1.1rem !important;
-        margin-bottom: 3px !important;
-    }
-    #screen-game .player-score { font-size: 0.9rem !important; }
-    #screen-game .round-info { font-size: 1rem !important; }
-    #screen-game .draws-info {
-        font-size: 0.8rem !important;
-        margin-top: 2px !important;
+    .player-name {
+        font-size: 1.3rem;
+        margin-bottom: 5px;
     }
     
-    #screen-game .board {
-        grid-template-columns: repeat(3, 70px) !important;
-        grid-template-rows: repeat(3, 70px) !important;
-        gap: 5px !important;
-        padding: 5px !important;
-        margin-bottom: 8px !important;
+    .player-score {
+        font-size: 1rem;
     }
     
-    #screen-game .cell { font-size: 2.6rem !important; }
-    
-    #screen-game .status-text {
-        font-size: 1.1rem !important;
-        margin-bottom: 8px !important;
+    .round-info {
+        font-size: 1.2rem;
     }
     
-    #screen-game .small-exit-btn {
-        margin-top: auto !important;
-        margin-bottom: 10px !important;
-        max-width: 160px !important;
-        min-height: 42px !important;
-        padding: 8px 15px !important;
-        font-size: 0.9rem !important;
-        flex-shrink: 0 !important;
+    .draws-info {
+        font-size: 0.9rem;
+        margin-top: 4px;
+    }
+    
+    /* Board */
+    .board {
+        grid-template-columns: repeat(3, 85px);
+        grid-template-rows: repeat(3, 85px);
+        gap: 6px;
+        padding: 6px;
+        margin-bottom: 12px;
+    }
+    
+    .cell {
+        font-size: 3.2rem;
+    }
+    
+    /* Status Text */
+    .status-text {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+    
+    /* Exit Button */
+    .small-exit-btn {
+        margin-top: 10px;
+        max-width: 180px !important;
+        min-height: 45px !important;
+        padding: 10px 20px !important;
+        font-size: 0.95rem !important;
     }
     
     /* Settings buttons */
+    .setting-row {
+        padding: 18px;
+    }
+    
     .setting-row .btn,
     .setting-row #musicToggle,
     .setting-row #soundToggle {
@@ -991,117 +983,57 @@ body.in-game #menuBg { opacity: 0; }
         font-family: 'Death', Arial, sans-serif !important;
     }
     
+    /* Titles */
+    .title { font-size: 3rem; }
+    .title-small { font-size: 1.8rem; }
+    .subtitle { font-size: 1.1rem; }
+    
     /* Player Counter */
     .player-counter {
-        font-size: 0.85rem !important;
-        padding: 8px 15px !important;
-        margin-top: 12px !important;
-        margin-bottom: 30px !important;
+        font-size: 0.9rem;
+        padding: 10px 18px;
+        margin-top: 15px;
+        margin-bottom: 25px;
     }
     
-    .player-counter #playerCount { font-size: 1.1rem !important; }
+    .player-counter #playerCount {
+        font-size: 1.2rem;
+    }
     
     /* Connection Status */
     .connection-status {
-        bottom: 12px !important;
-        right: 10px !important;
-        padding: 6px 12px !important;
-        font-size: 0.75rem !important;
-        z-index: 10 !important;
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 15px;
+        font-size: 0.8rem;
     }
     
     /* Version */
     .version {
-        bottom: 12px !important;
-        left: 10px !important;
-        font-size: 0.75rem !important;
-        z-index: 10 !important;
+        bottom: 15px;
+        left: 15px;
+        font-size: 0.8rem;
     }
     
-    /* Home buttons gap */
+    /* Home Menu */
     #screen-home .menu-buttons {
-        gap: 12px !important;
+        gap: 14px;
     }
     
-    /* Board general */
-    .board {
-        grid-template-columns: repeat(3, 75px);
-        grid-template-rows: repeat(3, 75px);
-    }
-    
-    .cell { font-size: 3rem; }
-    
-    /* Other text sizes */
-    .winner-name, .champion-name { font-size: 2.5rem; }
-    .match-over-title { font-size: 2.5rem; }
-    .match-score { font-size: 2rem; }
-    .credits-title { font-size: 2.5rem; }
-    .developer-name { font-size: 2rem; }
-    .thankyou-title { font-size: 3rem; }
-    .overlay-content { padding: 25px; }
+    /* Round/Match Over */
+    .winner-name, .champion-name { font-size: 2.8rem; }
+    .match-over-title { font-size: 2.8rem; }
+    .match-score { font-size: 2.2rem; }
+    .overlay-content { padding: 30px 25px; }
     .link-box { flex-direction: column; }
     .copy-btn { width: 100%; }
-}
-
-/* ============================================ */
-/* Very Small Screens (phones under 480px) */
-/* ============================================ */
-@media (max-width: 480px) {
-    #screen-game {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
-    }
     
-    #screen-game .board {
-        grid-template-columns: repeat(3, 65px) !important;
-        grid-template-rows: repeat(3, 65px) !important;
-        gap: 4px !important;
-    }
+    /* Credits */
+    .credits-title { font-size: 2.5rem; }
+    .developer-name { font-size: 2rem; }
+    .tech-name { font-size: 1.5rem; }
     
-    #screen-game .cell { font-size: 2.2rem !important; }
-    #screen-game .player-name { font-size: 1rem !important; }
-    #screen-game .round-info { font-size: 0.9rem !important; }
-    #screen-game .status-text {
-        font-size: 1rem !important;
-        margin-bottom: 5px !important;
-    }
-    
-    #screen-game .small-exit-btn {
-        max-width: 140px !important;
-        min-height: 38px !important;
-        font-size: 0.85rem !important;
-    }
-    
-    .player-counter {
-        font-size: 0.8rem !important;
-        padding: 6px 12px !important;
-    }
-    
-    .connection-status {
-        font-size: 0.7rem !important;
-        padding: 5px 10px !important;
-    }
-    
-    .version { font-size: 0.7rem !important; }
-    
-    .setting-row {
-        flex-direction: column;
-        gap: 12px;
-        padding: 18px;
-    }
-    
-    .setting-row .btn,
-    .setting-row #musicToggle,
-    .setting-row #soundToggle {
-        width: 100%;
-        max-width: 150px;
-        font-family: 'Death', Arial, sans-serif !important;
-    }
-    
-    .board {
-        grid-template-columns: repeat(3, 65px);
-        grid-template-rows: repeat(3, 65px);
-    }
-    
-    .cell { font-size: 2.6rem; }
+    /* Thank You */
+    .thankyou-title { font-size: 3rem; }
+    .thankyou-sub { font-size: 1.4rem; }
 }
