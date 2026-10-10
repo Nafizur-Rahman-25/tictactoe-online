@@ -1,5 +1,5 @@
 // ============================================
-// Tic Tac Toe Client - Full Logic
+// Tic Tac Toe Client - Full Logic with Mobile Optimization
 // ============================================
 
 const socket = io();
@@ -21,6 +21,12 @@ let currentMusic = null;
 let splashCompleted = false;
 let roundOverReady = false;
 let gameStarted = false;
+
+// ============================================
+// Mobile Detection
+// ============================================
+const isMobile = window.innerWidth < 768;
+const isSmallPhone = window.innerWidth < 480;
 
 // ============================================
 // Sound System
@@ -96,7 +102,7 @@ function showScreen(id) {
         document.body.classList.remove('in-menu');
         if (splashCompleted) switchMusic('gameplay');
     } else if (id === 'screen-round-over' || id === 'screen-match-over') {
-        // keep gameplay
+        // keep gameplay music
     } else if (id === 'screen-splash') {
         // nothing
     } else {
@@ -193,7 +199,7 @@ function toggleSound() {
 }
 
 // ============================================
-// Host Flow - Setup First, Then Wait
+// Host Flow
 // ============================================
 function goToHostSetup() {
     playSound('click');
@@ -326,7 +332,7 @@ window.addEventListener('load', () => {
 });
 
 // ============================================
-// Room Info (with host name)
+// Room Info
 // ============================================
 socket.on('roomInfo', (data) => {
     console.log('📋 Room info received:', data);
@@ -378,7 +384,6 @@ function submitGuestName() {
 socket.on('friendJoined', (data) => {
     playSound('win');
     console.log('🎉 Friend joined:', data);
-    // Host already has name set, so just wait for game start
 });
 
 // ============================================
@@ -636,7 +641,7 @@ function updateGameUI() {
 }
 
 // ============================================
-// Fireworks
+// Fireworks (with mobile optimization)
 // ============================================
 let fireworksAnims = {};
 
@@ -657,13 +662,16 @@ function startFireworks(canvasId) {
     let lastSpawn = 0;
     const colors = ['#ff5078', '#50c8ff', '#64ff96', '#ffd700', '#ff8c42', '#ff69b4', '#87ceeb', '#ee82ee'];
     
+    // Fewer particles on mobile
+    const spawnCount = isMobile ? 15 : (30 + Math.floor(Math.random() * 20));
+    const spawnInterval = isMobile ? 600 : 400;
+    
     function spawn() {
         const x = Math.random() * canvas.width;
         const y = 100 + Math.random() * (canvas.height * 0.5);
         const color = colors[Math.floor(Math.random() * colors.length)];
-        const count = 30 + Math.floor(Math.random() * 20);
-        for (let i = 0; i < count; i++) {
-            const angle = (Math.PI * 2 * i) / count;
+        for (let i = 0; i < spawnCount; i++) {
+            const angle = (Math.PI * 2 * i) / spawnCount;
             const speed = 2 + Math.random() * 4;
             particles.push({
                 x, y,
@@ -677,7 +685,7 @@ function startFireworks(canvasId) {
     
     function animate(timestamp) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (timestamp - lastSpawn > 400) { spawn(); lastSpawn = timestamp; }
+        if (timestamp - lastSpawn > spawnInterval) { spawn(); lastSpawn = timestamp; }
         
         for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
@@ -712,7 +720,7 @@ function stopFireworks(canvasId) {
 }
 
 // ============================================
-// Sakura Background
+// Sakura Background (with mobile optimization)
 // ============================================
 (function initBackground() {
     const canvas = document.getElementById('bgCanvas');
@@ -734,7 +742,10 @@ function stopFireworks(canvasId) {
         { fill: '#50c8ff', stroke: '#2ea8df' }
     ];
     
-    for (let i = 0; i < 30; i++) {
+    // Fewer petals on mobile for smooth performance
+    const numPetals = isMobile ? 12 : 30;
+    
+    for (let i = 0; i < numPetals; i++) {
         petals.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
@@ -792,3 +803,23 @@ function stopFireworks(canvasId) {
     }
     animate();
 })();
+
+// ============================================
+// Mobile Performance: Pause videos when tab is hidden
+// ============================================
+document.addEventListener('visibilitychange', () => {
+    const menuBg = document.getElementById('menuBg');
+    const gameBg = document.getElementById('gameBg');
+    
+    if (document.hidden) {
+        if (menuBg) menuBg.pause();
+        if (gameBg) gameBg.pause();
+    } else {
+        if (menuBg && !document.body.classList.contains('in-game')) {
+            menuBg.play().catch(() => {});
+        }
+        if (gameBg && document.body.classList.contains('in-game')) {
+            gameBg.play().catch(() => {});
+        }
+    }
+});

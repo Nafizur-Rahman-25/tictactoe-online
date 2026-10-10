@@ -650,6 +650,10 @@ body.in-game #menuBg { opacity: 0; }
     padding: 12px 20px;
     font-size: 1.2rem;
     letter-spacing: 3px;
+    font-family: 'Death', Arial, sans-serif;
+    font-weight: normal;
+    min-height: 50px;
+    max-width: 120px;
 }
 
 /* Credits */
@@ -736,4 +740,82 @@ body.in-game #menuBg { opacity: 0; }
     .credits-title { font-size: 2.5rem; }
     .developer-name { font-size: 2rem; }
     .thankyou-title { font-size: 3rem; }
+}
+
+/* ============================================ */
+/* Mobile Performance Optimization */
+/* ============================================ */
+@media (max-width: 768px) {
+    /* Disable background videos on mobile for smooth performance */
+    #menuBg, #gameBg {
+        display: none !important;
+    }
+    
+    /* Fallback gradient backgrounds */
+    body.in-menu, body.in-game {
+        background: linear-gradient(135deg, #0f0f1e 0%, #1a1a35 100%);
+    }
+    
+    /* Reduce canvas opacity for less GPU work */
+    #bgCanvas {
+        opacity: 0.85;
+    }
+    
+    /* Remove backdrop-filter (very heavy on mobile) */
+    .btn, .game-header, .board, .overlay-content, 
+    .setting-row, .link-box input {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    
+    /* Simpler shadows on mobile */
+    .btn:hover {
+        box-shadow: 0 0 15px rgba(80, 200, 255, 0.5);
+        transform: scale(1.02);
+    }
+    
+    .cell:hover {
+        box-shadow: 0 0 12px rgba(80, 200, 255, 0.4);
+        transform: scale(1.02);
+    }
+    
+    /* Smaller settings buttons */
+    .setting-row .btn {
+        width: 100px;
+        min-height: 45px;
+        font-size: 1rem;
+        padding: 10px 15px;
+    }
+    
+    /* Reduce font sizes for faster rendering */
+    .title {
+        font-size: 2.5rem !important;
+    }
+    
+    .title-small {
+        font-size: 1.6rem !important;
+    }
+}
+
+/* Very small screens (phones) */
+@media (max-width: 480px) {
+    .setting-row {
+        flex-direction: column;
+        gap: 12px;
+        padding: 18px;
+    }
+    
+    .setting-row .btn {
+        width: 100%;
+        max-width: 150px;
+    }
+    
+    .board {
+        grid-template-columns: repeat(3, 85px);
+        grid-template-rows: repeat(3, 85px);
+    }
+    
+    .cell {
+        font-size: 3rem;
+    }
 }
