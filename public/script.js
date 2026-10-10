@@ -167,8 +167,8 @@ function toggleMusic() {
     const btn = document.getElementById('musicToggle');
     if (musicEnabled) {
         btn.textContent = 'ON';
-        btn.classList.add('btn-yes');
-        btn.classList.remove('btn-no');
+        btn.style.backgroundColor = 'rgba(30, 100, 50, 0.9)';
+        btn.style.borderColor = 'var(--success)';
         if (splashCompleted) {
             if (currentMusic === 'interface') switchMusic('interface');
             else if (currentMusic === 'gameplay') switchMusic('gameplay');
@@ -176,8 +176,8 @@ function toggleMusic() {
         }
     } else {
         btn.textContent = 'OFF';
-        btn.classList.add('btn-no');
-        btn.classList.remove('btn-yes');
+        btn.style.backgroundColor = 'rgba(80, 40, 30, 0.9)';
+        btn.style.borderColor = 'var(--danger)';
         stopAllMusic();
     }
     playSound('click');
@@ -188,13 +188,13 @@ function toggleSound() {
     const btn = document.getElementById('soundToggle');
     if (soundEnabled) {
         btn.textContent = 'ON';
-        btn.classList.add('btn-yes');
-        btn.classList.remove('btn-no');
+        btn.style.backgroundColor = 'rgba(30, 100, 50, 0.9)';
+        btn.style.borderColor = 'var(--success)';
         playSound('click');
     } else {
         btn.textContent = 'OFF';
-        btn.classList.add('btn-no');
-        btn.classList.remove('btn-yes');
+        btn.style.backgroundColor = 'rgba(80, 40, 30, 0.9)';
+        btn.style.borderColor = 'var(--danger)';
     }
 }
 
