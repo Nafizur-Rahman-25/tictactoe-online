@@ -733,7 +733,7 @@ function stopFireworks(canvasId) {
 }
 
 // ============================================
-// Sakura + Stars Background (Mobile & PC optimized)
+// Sakura + Stars + Shooting Stars + Orbs Background
 // ============================================
 (function initBackground() {
     const canvas = document.getElementById('bgCanvas');
@@ -748,7 +748,7 @@ function stopFireworks(canvasId) {
     window.addEventListener('resize', resize);
 
     // ============================================
-    // Sakura Petals
+    // 1. Sakura Petals
     // ============================================
     const petals = [];
     const petalColors = [
@@ -759,7 +759,6 @@ function stopFireworks(canvasId) {
     ];
 
     const numPetals = isMobile ? 12 : 25;
-    console.log('🌸 Sakura petals:', numPetals, isMobile ? '(mobile)' : '(PC)');
 
     for (let i = 0; i < numPetals; i++) {
         petals.push({
@@ -802,10 +801,10 @@ function stopFireworks(canvasId) {
     }
 
     // ============================================
-    // Stars (Glowing dots for mobile & PC)
+    // 2. Stars (Glowing dots)
     // ============================================
     const stars = [];
-    const numStars = isMobile ? 40 : 30;
+    const numStars = isMobile ? 50 : 40;
     const starColors = ['#50c8ff', '#ff5078', '#ffffff', '#ffd700', '#a070ff'];
 
     for (let i = 0; i < numStars; i++) {
@@ -829,7 +828,6 @@ function stopFireworks(canvasId) {
 
         const pulsingAlpha = star.alpha + Math.sin(star.pulse) * 0.25;
 
-        // Wrap around
         if (star.y < -10) star.y = canvas.height + 10;
         if (star.y > canvas.height + 10) star.y = -10;
         if (star.x < -10) star.x = canvas.width + 10;
@@ -845,19 +843,135 @@ function stopFireworks(canvasId) {
     }
 
     // ============================================
-    // Combined Animation Loop (Stars + Petals together)
+    // 3. Shooting Stars (উল্কা)
+    // ============================================
+    const shootingStars = [];
+    const maxShootingStars = 3;
+
+    function spawnShootingStar() {
+        if (shootingStars.length >= maxShootingStars) return;
+        if (Math.random() > 0.02) return; // Rare spawn
+
+        shootingStars.push({
+            x: Math.random() * canvas.width,
+            y: -50,
+            length: 80 + Math.random() * 100,
+            speed: 8 + Math.random() * 6,
+            angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3, // 45 degree
+            life: 1.0,
+            color: Math.random() > 0.5 ? '#50c8ff' : '#ffffff'
+        });
+    }
+
+    function drawShootingStar(s) {
+        ctx.save();
+        ctx.globalAlpha = s.life * 0.9;
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = s.color;
+
+        const endX = s.x - Math.cos(s.angle) * s.length;
+        const endY = s.y - Math.sin(s.angle) * s.length;
+
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+
+        // Bright head
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = s.color;
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    function updateShootingStars() {
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+            const s = shootingStars[i];
+            s.x += Math.cos(s.angle) * s.speed;
+            s.y += Math.sin(s.angle) * s.speed;
+            s.life -= 0.01;
+
+            if (s.life <= 0 || s.x > canvas.width + 100 || s.y > canvas.height + 100) {
+                shootingStars.splice(i, 1);
+            }
+        }
+    }
+
+    // ============================================
+    // 4. Glowing Orbs (বড় আলোকিত গোলক)
+    // ============================================
+    const orbs = [];
+    const numOrbs = isMobile ? 4 : 6;
+    const orbColors = [
+        'rgba(80, 200, 255, 0.15)',
+        'rgba(255, 80, 120, 0.12)',
+        'rgba(160, 112, 255, 0.13)',
+        'rgba(100, 255, 150, 0.1)'
+    ];
+
+    for (let i = 0; i < numOrbs; i++) {
+        orbs.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: 80 + Math.random() * 120,
+            color: orbColors[Math.floor(Math.random() * orbColors.length)],
+            speedX: (Math.random() - 0.5) * 0.3,
+            speedY: (Math.random() - 0.5) * 0.3,
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: 0.005 + Math.random() * 0.01
+        });
+    }
+
+    function drawOrb(orb) {
+        orb.pulse += orb.pulseSpeed;
+        orb.x += orb.speedX;
+        orb.y += orb.speedY;
+
+        // Wrap around
+        if (orb.x < -orb.radius) orb.x = canvas.width + orb.radius;
+        if (orb.x > canvas.width + orb.radius) orb.x = -orb.radius;
+        if (orb.y < -orb.radius) orb.y = canvas.height + orb.radius;
+        if (orb.y > canvas.height + orb.radius) orb.y = -orb.radius;
+
+        const pulseRadius = orb.radius + Math.sin(orb.pulse) * 20;
+
+        const gradient = ctx.createRadialGradient(
+            orb.x, orb.y, 0,
+            orb.x, orb.y, pulseRadius
+        );
+        gradient.addColorStop(0, orb.color);
+        gradient.addColorStop(1, 'transparent');
+
+        ctx.beginPath();
+        ctx.arc(orb.x, orb.y, pulseRadius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+    }
+
+    // ============================================
+    // 5. Combined Animation Loop
     // ============================================
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 1. Draw Stars (background layer)
-        stars.forEach(star => drawStar(star));
+        // Layer 1: Glowing Orbs (background)
+        orbs.forEach(orb => drawOrb(orb));
 
-        // Reset shadow before petals
+        // Layer 2: Stars
+        stars.forEach(star => drawStar(star));
         ctx.shadowBlur = 0;
         ctx.globalAlpha = 1;
 
-        // 2. Draw Petals (foreground layer)
+        // Layer 3: Shooting Stars (update + draw)
+        spawnShootingStar();
+        updateShootingStars();
+        shootingStars.forEach(s => drawShootingStar(s));
+
+        // Layer 4: Sakura Petals (foreground)
         petals.forEach(p => {
             p.y += p.speedY;
             p.swayPhase += p.swaySpeed;
