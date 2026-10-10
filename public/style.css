@@ -1079,16 +1079,16 @@ body.in-game #menuBg {
 
     /* Game Screen Layout */
     #screen-game {
-        justify-content: space-between;
+        justify-content: flex-start;
         padding: 10px;
-        padding-top: 8px;
-        padding-bottom: 15px;
+        padding-top: 30px;
+        padding-bottom: 20px;
     }
 
     /* Game Header - Fix name display */
     .game-header {
         padding: 10px 12px;
-        margin-bottom: 12px;
+        margin-bottom: 25px;
         margin-top: 0;
         gap: 5px;
         flex-wrap: wrap;
@@ -1151,8 +1151,8 @@ body.in-game #menuBg {
         grid-template-rows: repeat(3, 85px);
         gap: 6px;
         padding: 6px;
-        margin-bottom: 12px;
-        margin-top: auto;
+        margin-bottom: 25px;
+        margin-top: 0;
     }
 
     .cell {
@@ -1162,13 +1162,15 @@ body.in-game #menuBg {
     /* Status Text */
     .status-text {
         font-size: 1.2rem;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        margin-top: 0;
     }
+
 
     /* Exit Button */
     .small-exit-btn {
-        margin-top: auto;
-        margin-bottom: 5px;
+        margin-top: 0;
+        margin-bottom: 0;
         max-width: 180px !important;
         min-height: 45px !important;
         padding: 10px 20px !important;
