@@ -36,8 +36,7 @@
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -65,8 +64,7 @@ body {
     pointer-events: none;
 }
 
-#menuBg,
-#gameBg {
+#menuBg, #gameBg {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -81,31 +79,13 @@ body {
     transition: opacity 0.3s ease;
 }
 
-#menuBg {
-    opacity: 0;
-    filter: brightness(0.75);
-}
+#menuBg { opacity: 0; filter: brightness(0.75); }
+#gameBg { opacity: 0; filter: brightness(0.55); }
 
-#gameBg {
-    opacity: 0;
-    filter: brightness(0.55);
-}
-
-body.in-menu #menuBg {
-    opacity: 0.85;
-}
-
-body.in-menu #gameBg {
-    opacity: 0;
-}
-
-body.in-game #gameBg {
-    opacity: 0.85;
-}
-
-body.in-game #menuBg {
-    opacity: 0;
-}
+body.in-menu #menuBg { opacity: 0.85; }
+body.in-menu #gameBg { opacity: 0; }
+body.in-game #gameBg { opacity: 0.85; }
+body.in-game #menuBg { opacity: 0; }
 
 /* ============================================ */
 /* Screens */
@@ -130,13 +110,8 @@ body.in-game #menuBg {
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* ============================================ */
@@ -185,15 +160,8 @@ body.in-game #menuBg {
 }
 
 @keyframes titlePulse {
-
-    0%,
-    100% {
-        text-shadow: 0 0 10px var(--accent-o), 0 0 20px var(--accent-o), 0 0 40px var(--accent-o);
-    }
-
-    50% {
-        text-shadow: 0 0 20px var(--accent-o), 0 0 40px var(--accent-o), 0 0 80px var(--accent-o);
-    }
+    0%, 100% { text-shadow: 0 0 10px var(--accent-o), 0 0 20px var(--accent-o), 0 0 40px var(--accent-o); }
+    50% { text-shadow: 0 0 20px var(--accent-o), 0 0 40px var(--accent-o), 0 0 80px var(--accent-o); }
 }
 
 /* ============================================ */
@@ -215,15 +183,8 @@ body.in-game #menuBg {
 }
 
 @keyframes splashBlink {
-
-    0%,
-    100% {
-        opacity: 0.5;
-    }
-
-    50% {
-        opacity: 1;
-    }
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
 }
 
 .splash-pulse {
@@ -236,17 +197,8 @@ body.in-game #menuBg {
 }
 
 @keyframes splashPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(1.15);
-        opacity: 0.7;
-    }
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.7; }
 }
 
 /* ============================================ */
@@ -289,15 +241,12 @@ body.in-game #menuBg {
     box-shadow: 0 0 25px rgba(80, 200, 255, 0.7);
 }
 
-.btn:active {
-    transform: scale(0.98);
-}
+.btn:active { transform: scale(0.98); }
 
 .btn-secondary {
     background-color: rgba(30, 100, 50, 0.85);
     border-color: var(--success);
 }
-
 .btn-secondary:hover {
     background-color: #2e9650;
     box-shadow: 0 0 25px rgba(100, 255, 150, 0.7);
@@ -307,7 +256,6 @@ body.in-game #menuBg {
     background-color: rgba(80, 40, 30, 0.85);
     border-color: var(--danger);
 }
-
 .btn-danger:hover {
     background-color: #c83c50;
     box-shadow: 0 0 25px rgba(200, 60, 80, 0.7);
@@ -317,7 +265,6 @@ body.in-game #menuBg {
     background-color: rgba(30, 100, 50, 0.9);
     border-color: var(--success);
 }
-
 .btn-yes:hover {
     background-color: #2e9650;
     box-shadow: 0 0 30px rgba(100, 255, 150, 0.8);
@@ -327,7 +274,6 @@ body.in-game #menuBg {
     background-color: rgba(80, 40, 30, 0.9);
     border-color: var(--danger);
 }
-
 .btn-no:hover {
     background-color: #c83c50;
     box-shadow: 0 0 30px rgba(200, 60, 80, 0.8);
@@ -351,19 +297,8 @@ body.in-game #menuBg {
 }
 
 @keyframes pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 1;
-        box-shadow: 0 0 20px var(--accent-o);
-    }
-
-    50% {
-        transform: scale(1.3);
-        opacity: 0.5;
-        box-shadow: 0 0 40px var(--accent-o);
-    }
+    0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 20px var(--accent-o); }
+    50% { transform: scale(1.3); opacity: 0.5; box-shadow: 0 0 40px var(--accent-o); }
 }
 
 /* ============================================ */
@@ -407,7 +342,7 @@ body.in-game #menuBg {
 }
 
 /* ============================================ */
-/* Connection Status */
+/* Connection Status & Version */
 /* ============================================ */
 .connection-status {
     position: fixed;
@@ -422,15 +357,8 @@ body.in-game #menuBg {
     z-index: 3;
 }
 
-.connection-status.connected {
-    border-color: var(--success);
-    color: var(--success);
-}
-
-.connection-status.disconnected {
-    border-color: var(--danger);
-    color: var(--danger);
-}
+.connection-status.connected { border-color: var(--success); color: var(--success); }
+.connection-status.disconnected { border-color: var(--danger); color: var(--danger); }
 
 .version {
     position: fixed;
@@ -452,9 +380,7 @@ body.in-game #menuBg {
     letter-spacing: 2px;
 }
 
-.invitation-icon {
-    margin: 20px 0;
-}
+.invitation-icon { margin: 20px 0; }
 
 .icon-pulse {
     font-size: 5rem;
@@ -463,17 +389,8 @@ body.in-game #menuBg {
 }
 
 @keyframes iconPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 20px var(--accent-o));
-    }
-
-    50% {
-        transform: scale(1.2);
-        filter: drop-shadow(0 0 40px var(--accent-o));
-    }
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--accent-o)); }
+    50% { transform: scale(1.2); filter: drop-shadow(0 0 40px var(--accent-o)); }
 }
 
 .invitation-buttons {
@@ -575,13 +492,8 @@ body.in-game #menuBg {
     backdrop-filter: blur(5px);
 }
 
-.player-info {
-    min-width: 160px;
-}
-
-.player2-info {
-    text-align: right;
-}
+.player-info { min-width: 160px; }
+.player2-info { text-align: right; }
 
 .player-name {
     font-size: 1.6rem;
@@ -590,30 +502,14 @@ body.in-game #menuBg {
     letter-spacing: 2px;
 }
 
-.player-name-x {
-    color: var(--accent-x);
-}
+.player-name-x { color: var(--accent-x); }
+.player-name-o { color: var(--accent-o); }
 
-.player-name-o {
-    color: var(--accent-o);
-}
+.player-score { font-size: 1.1rem; font-weight: bold; }
+.score-x { color: var(--accent-x); }
+.score-o { color: var(--accent-o); }
 
-.player-score {
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-.score-x {
-    color: var(--accent-x);
-}
-
-.score-o {
-    color: var(--accent-o);
-}
-
-.center-info {
-    text-align: center;
-}
+.center-info { text-align: center; }
 
 .round-info {
     font-size: 1.4rem;
@@ -672,17 +568,9 @@ body.in-game #menuBg {
 }
 
 @keyframes popIn {
-    0% {
-        transform: scale(0);
-    }
-
-    70% {
-        transform: scale(1.2);
-    }
-
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(0); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
 }
 
 .status-text {
@@ -694,15 +582,8 @@ body.in-game #menuBg {
     margin-bottom: 10px;
 }
 
-.status-text.turn-x {
-    color: var(--accent-x);
-    text-shadow: 0 0 20px var(--accent-x);
-}
-
-.status-text.turn-o {
-    color: var(--accent-o);
-    text-shadow: 0 0 20px var(--accent-o);
-}
+.status-text.turn-x { color: var(--accent-x); text-shadow: 0 0 20px var(--accent-x); }
+.status-text.turn-o { color: var(--accent-o); text-shadow: 0 0 20px var(--accent-o); }
 
 /* Small Exit Button in Game */
 .small-exit-btn {
@@ -717,8 +598,7 @@ body.in-game #menuBg {
 /* ============================================ */
 /* Round/Match Over */
 /* ============================================ */
-#fireworksCanvas,
-#fireworksCanvas2 {
+#fireworksCanvas, #fireworksCanvas2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -752,13 +632,8 @@ body.in-game #menuBg {
 }
 
 @keyframes winnerGlow {
-    from {
-        text-shadow: 0 0 20px currentColor;
-    }
-
-    to {
-        text-shadow: 0 0 40px currentColor, 0 0 80px currentColor;
-    }
+    from { text-shadow: 0 0 20px currentColor; }
+    to { text-shadow: 0 0 40px currentColor, 0 0 80px currentColor; }
 }
 
 .loser-info {
@@ -791,15 +666,8 @@ body.in-game #menuBg {
 }
 
 @keyframes blink {
-
-    0%,
-    100% {
-        opacity: 0.4;
-    }
-
-    50% {
-        opacity: 1;
-    }
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
 }
 
 .match-over-title {
@@ -835,7 +703,7 @@ body.in-game #menuBg {
 }
 
 /* ============================================ */
-/* Settings (with Death font enforced) */
+/* Settings (Death font enforced) */
 /* ============================================ */
 .setting-row {
     display: flex;
@@ -940,181 +808,8 @@ body.in-game #menuBg {
 }
 
 /* ============================================ */
-/* Responsive - Small Screens */
+/* Custom Utility Classes */
 /* ============================================ */
-@media (max-width: 600px) {
-    .title {
-        font-size: 3rem;
-    }
-
-    .title-small {
-        font-size: 1.8rem;
-    }
-
-    .btn {
-        font-size: 1.1rem;
-        padding: 14px 24px;
-    }
-
-    .link-box {
-        flex-direction: column;
-    }
-
-    .copy-btn {
-        width: 100%;
-    }
-
-    .board {
-        grid-template-columns: repeat(3, 75px);
-        grid-template-rows: repeat(3, 75px);
-    }
-
-    .cell {
-        font-size: 3rem;
-    }
-
-    .winner-name,
-    .champion-name {
-        font-size: 2.5rem;
-    }
-
-    .match-over-title {
-        font-size: 2.5rem;
-    }
-
-    .match-score {
-        font-size: 2rem;
-    }
-
-    .game-header {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-
-    .player2-info {
-        text-align: center;
-    }
-
-    .overlay-content {
-        padding: 25px;
-    }
-
-    .credits-title {
-        font-size: 2.5rem;
-    }
-
-    .developer-name {
-        font-size: 2rem;
-    }
-
-    .thankyou-title {
-        font-size: 3rem;
-    }
-}
-
-/* ============================================ */
-/* Mobile Performance Optimization */
-/* ============================================ */
-@media (max-width: 768px) {
-
-    /* Enable background videos on mobile with lower brightness */
-    #menuBg,
-    #gameBg {
-        display: block !important;
-    }
-
-    #menuBg {
-        filter: brightness(0.7) !important;
-    }
-
-    #gameBg {
-        filter: brightness(0.5) !important;
-    }
-
-
-    /* Keep sakura but reduce opacity */
-    #bgCanvas {
-        opacity: 0.75;
-    }
-
-    /* Fallback gradient background */
-    body.in-menu,
-    body.in-game {
-        background: linear-gradient(135deg, #0f0f1e 0%, #1a1a35 100%);
-    }
-
-    /* Remove backdrop-filter (very heavy on mobile) */
-    .btn,
-    .game-header,
-    .board,
-    .overlay-content,
-    .setting-row,
-    .link-box input {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-    }
-
-    /* Simpler hover effects */
-    .btn:hover {
-        box-shadow: 0 0 15px rgba(80, 200, 255, 0.5);
-        transform: scale(1.02);
-    }
-
-    .cell:hover {
-        box-shadow: 0 0 12px rgba(80, 200, 255, 0.4);
-        transform: scale(1.02);
-    }
-
-    /* Settings buttons - KEEP DEATH FONT with !important */
-    .setting-row .btn,
-    .setting-row #musicToggle,
-    .setting-row #soundToggle {
-        width: 100px;
-        min-height: 45px;
-        font-size: 1rem;
-        padding: 10px 15px;
-        font-family: 'Death', Arial, sans-serif !important;
-    }
-
-    /* Reduce title sizes */
-    .title {
-        font-size: 2.5rem !important;
-    }
-
-    .title-small {
-        font-size: 1.6rem !important;
-    }
-}
-
-/* ============================================ */
-/* Very Small Screens (phones) */
-/* ============================================ */
-@media (max-width: 480px) {
-    .setting-row {
-        flex-direction: column;
-        gap: 12px;
-        padding: 18px;
-    }
-
-    .setting-row .btn,
-    .setting-row #musicToggle,
-    .setting-row #soundToggle {
-        width: 100%;
-        max-width: 150px;
-        font-family: 'Death', Arial, sans-serif !important;
-    }
-
-    .board {
-        grid-template-columns: repeat(3, 85px);
-        grid-template-rows: repeat(3, 85px);
-    }
-
-    .cell {
-        font-size: 3rem;
-    }
-}
-
 .death-font {
     font-family: 'Death', Arial, sans-serif !important;
     font-weight: normal !important;
@@ -1133,9 +828,6 @@ body.in-game #menuBg {
     text-decoration: underline;
 }
 
-/* ============================================ */
-/* Credits Screen - Beautiful Font Mix */
-/* ============================================ */
 .credits-font-1 {
     font-family: 'BlackUnicorn', Arial, sans-serif !important;
     font-size: 1.4rem !important;
@@ -1160,8 +852,9 @@ body.in-game #menuBg {
     background-color: rgba(25, 30, 50, 0.85);
     border: 2px solid var(--accent-o);
     border-radius: 30px;
-    font-family: 'Death', Arial, sans-serif;
+    font-family: 'Arial', sans-serif !important;
     font-size: 1.1rem;
+    font-weight: bold;
     color: var(--accent-o);
     letter-spacing: 2px;
     box-shadow: 0 0 20px rgba(80, 200, 255, 0.3);
@@ -1171,30 +864,244 @@ body.in-game #menuBg {
 .player-counter #playerCount {
     color: var(--gold);
     font-weight: bold;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     text-shadow: 0 0 10px var(--gold);
+    font-family: 'Arial', sans-serif !important;
 }
 
 @keyframes counterPulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 20px rgba(80, 200, 255, 0.3);
-    }
-
-    50% {
-        box-shadow: 0 0 30px rgba(80, 200, 255, 0.6);
-    }
+    0%, 100% { box-shadow: 0 0 20px rgba(80, 200, 255, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(80, 200, 255, 0.6); }
 }
 
-/* Mobile adjustment */
+/* ============================================ */
+/* Mobile Performance Optimization */
+/* ============================================ */
 @media (max-width: 768px) {
+    /* Enable videos with lower brightness */
+    #menuBg, #gameBg {
+        display: block !important;
+    }
+    
+    #menuBg { filter: brightness(0.7) !important; }
+    #gameBg { filter: brightness(0.5) !important; }
+    
+    /* Use dynamic viewport height */
+    .screen {
+        height: 100dvh !important;
+        min-height: 100dvh !important;
+        padding: 15px !important;
+        overflow: visible !important;
+    }
+    
+    /* Sakura canvas */
+    #bgCanvas {
+        height: 100dvh !important;
+        width: 100vw !important;
+        opacity: 0.85;
+    }
+    
+    /* Fallback gradient */
+    body.in-menu, body.in-game {
+        background: linear-gradient(135deg, #0f0f1e 0%, #1a1a35 100%);
+    }
+    
+    /* Remove backdrop-filter (heavy on mobile) */
+    .btn, .game-header, .board, .overlay-content,
+    .setting-row, .link-box input {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    
+    /* Simpler hover */
+    .btn:hover {
+        box-shadow: 0 0 15px rgba(80, 200, 255, 0.5);
+        transform: scale(1.02);
+    }
+    
+    .cell:hover {
+        box-shadow: 0 0 12px rgba(80, 200, 255, 0.4);
+        transform: scale(1.02);
+    }
+    
+    /* Title sizes */
+    .title { font-size: 2.5rem !important; }
+    .title-small { font-size: 1.6rem !important; }
+    
+    /* Game Screen Layout */
+    #screen-game {
+        justify-content: flex-start !important;
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+        overflow-y: auto !important;
+    }
+    
+    #screen-game .game-header {
+        padding: 8px 12px !important;
+        margin-bottom: 8px !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+    }
+    
+    #screen-game .player-info { min-width: auto !important; }
+    #screen-game .player-name {
+        font-size: 1.1rem !important;
+        margin-bottom: 3px !important;
+    }
+    #screen-game .player-score { font-size: 0.9rem !important; }
+    #screen-game .round-info { font-size: 1rem !important; }
+    #screen-game .draws-info {
+        font-size: 0.8rem !important;
+        margin-top: 2px !important;
+    }
+    
+    #screen-game .board {
+        grid-template-columns: repeat(3, 70px) !important;
+        grid-template-rows: repeat(3, 70px) !important;
+        gap: 5px !important;
+        padding: 5px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    #screen-game .cell { font-size: 2.6rem !important; }
+    
+    #screen-game .status-text {
+        font-size: 1.1rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    #screen-game .small-exit-btn {
+        margin-top: auto !important;
+        margin-bottom: 10px !important;
+        max-width: 160px !important;
+        min-height: 42px !important;
+        padding: 8px 15px !important;
+        font-size: 0.9rem !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Settings buttons */
+    .setting-row .btn,
+    .setting-row #musicToggle,
+    .setting-row #soundToggle {
+        width: 100px;
+        min-height: 45px;
+        font-size: 1rem;
+        padding: 10px 15px;
+        font-family: 'Death', Arial, sans-serif !important;
+    }
+    
+    /* Player Counter */
     .player-counter {
-        font-size: 0.95rem;
-        padding: 10px 20px;
+        font-size: 0.85rem !important;
+        padding: 8px 15px !important;
+        margin-top: 12px !important;
+        margin-bottom: 30px !important;
     }
+    
+    .player-counter #playerCount { font-size: 1.1rem !important; }
+    
+    /* Connection Status */
+    .connection-status {
+        bottom: 12px !important;
+        right: 10px !important;
+        padding: 6px 12px !important;
+        font-size: 0.75rem !important;
+        z-index: 10 !important;
+    }
+    
+    /* Version */
+    .version {
+        bottom: 12px !important;
+        left: 10px !important;
+        font-size: 0.75rem !important;
+        z-index: 10 !important;
+    }
+    
+    /* Home buttons gap */
+    #screen-home .menu-buttons {
+        gap: 12px !important;
+    }
+    
+    /* Board general */
+    .board {
+        grid-template-columns: repeat(3, 75px);
+        grid-template-rows: repeat(3, 75px);
+    }
+    
+    .cell { font-size: 3rem; }
+    
+    /* Other text sizes */
+    .winner-name, .champion-name { font-size: 2.5rem; }
+    .match-over-title { font-size: 2.5rem; }
+    .match-score { font-size: 2rem; }
+    .credits-title { font-size: 2.5rem; }
+    .developer-name { font-size: 2rem; }
+    .thankyou-title { font-size: 3rem; }
+    .overlay-content { padding: 25px; }
+    .link-box { flex-direction: column; }
+    .copy-btn { width: 100%; }
+}
 
-    .player-counter #playerCount {
-        font-size: 1.1rem;
+/* ============================================ */
+/* Very Small Screens (phones under 480px) */
+/* ============================================ */
+@media (max-width: 480px) {
+    #screen-game {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
     }
+    
+    #screen-game .board {
+        grid-template-columns: repeat(3, 65px) !important;
+        grid-template-rows: repeat(3, 65px) !important;
+        gap: 4px !important;
+    }
+    
+    #screen-game .cell { font-size: 2.2rem !important; }
+    #screen-game .player-name { font-size: 1rem !important; }
+    #screen-game .round-info { font-size: 0.9rem !important; }
+    #screen-game .status-text {
+        font-size: 1rem !important;
+        margin-bottom: 5px !important;
+    }
+    
+    #screen-game .small-exit-btn {
+        max-width: 140px !important;
+        min-height: 38px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .player-counter {
+        font-size: 0.8rem !important;
+        padding: 6px 12px !important;
+    }
+    
+    .connection-status {
+        font-size: 0.7rem !important;
+        padding: 5px 10px !important;
+    }
+    
+    .version { font-size: 0.7rem !important; }
+    
+    .setting-row {
+        flex-direction: column;
+        gap: 12px;
+        padding: 18px;
+    }
+    
+    .setting-row .btn,
+    .setting-row #musicToggle,
+    .setting-row #soundToggle {
+        width: 100%;
+        max-width: 150px;
+        font-family: 'Death', Arial, sans-serif !important;
+    }
+    
+    .board {
+        grid-template-columns: repeat(3, 65px);
+        grid-template-rows: repeat(3, 65px);
+    }
+    
+    .cell { font-size: 2.6rem; }
 }
