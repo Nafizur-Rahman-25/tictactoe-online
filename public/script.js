@@ -804,7 +804,7 @@ function stopFireworks(canvasId) {
     // 2. Stars (Glowing dots)
     // ============================================
     const stars = [];
-    const numStars = isMobile ? 50 : 40;
+    const numStars = isMobile ? 25 : 40;
     const starColors = ['#50c8ff', '#ff5078', '#ffffff', '#ffd700', '#a070ff'];
 
     for (let i = 0; i < numStars; i++) {
@@ -837,7 +837,7 @@ function stopFireworks(canvasId) {
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fillStyle = star.color;
         ctx.globalAlpha = Math.max(0.1, Math.min(0.9, pulsingAlpha));
-        ctx.shadowBlur = 10;
+         ctx.shadowBlur = isMobile ? 5 : 10;
         ctx.shadowColor = star.color;
         ctx.fill();
     }
@@ -846,7 +846,7 @@ function stopFireworks(canvasId) {
     // 3. Shooting Stars (উল্কা)
     // ============================================
     const shootingStars = [];
-    const maxShootingStars = 3;
+    const maxShootingStars = isMobile ? 1 : 3;
 
     function spawnShootingStar() {
         if (shootingStars.length >= maxShootingStars) return;
@@ -905,7 +905,7 @@ function stopFireworks(canvasId) {
     // 4. Glowing Orbs (বড় আলোকিত গোলক)
     // ============================================
     const orbs = [];
-    const numOrbs = isMobile ? 4 : 6;
+    const numOrbs = isMobile ? 2 : 6;
     const orbColors = [
         'rgba(80, 200, 255, 0.15)',
         'rgba(255, 80, 120, 0.12)',
@@ -1012,9 +1012,15 @@ document.addEventListener('visibilitychange', () => {
 });
 
 // ============================================
-// Video Autoplay Fallback (Mobile)
+// Video Autoplay Fallback (PC Only - Disabled on Mobile)
 // ============================================
 function initVideos() {
+    // Skip on mobile - videos are disabled
+    if (isMobile) {
+        console.log('📱 Videos disabled on mobile - using Canvas animation only');
+        return;
+    }
+
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
 
@@ -1033,8 +1039,17 @@ window.addEventListener('load', () => {
     setTimeout(initVideos, 500);
 });
 
-// First user interaction (mobile requires this)
+// First user interaction (PC only)
 document.addEventListener('touchstart', () => {
+    if (isMobile) return;
+    const menuBg = document.getElementById('menuBg');
+    const gameBg = document.getElementById('gameBg');
+    if (menuBg) menuBg.play().catch(() => { });
+    if (gameBg) gameBg.play().catch(() => { });
+}, { once: true });
+
+document.addEventListener('click', () => {
+    if (isMobile) return;
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
     if (menuBg) menuBg.play().catch(() => { });

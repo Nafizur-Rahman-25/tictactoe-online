@@ -1033,6 +1033,8 @@ body.in-game #menuBg {
     #menuBg,
     #gameBg {
         display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
     }
 
     /* Beautiful Animated Gradient Background */
