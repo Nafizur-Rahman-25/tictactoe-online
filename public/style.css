@@ -1079,9 +1079,10 @@ body.in-game #menuBg {
 
     /* Game Screen Layout */
     #screen-game {
-        justify-content: flex-start;
+        justify-content: space-between;
         padding: 10px;
-        padding-top: 5px;
+        padding-top: 8px;
+        padding-bottom: 15px;
     }
 
     /* Game Header - Fix name display */
@@ -1129,6 +1130,21 @@ body.in-game #menuBg {
         margin-top: 4px;
     }
 
+    /* Board + Status Container - Center them */
+    .board {
+        margin-top: auto;
+        margin-bottom: 10px;
+    }
+
+    .status-text {
+        margin-bottom: 10px;
+    }
+
+    .small-exit-btn {
+        margin-bottom: 5px;
+        margin-top: auto;
+    }
+
     /* Board */
     .board {
         grid-template-columns: repeat(3, 85px);
@@ -1136,6 +1152,7 @@ body.in-game #menuBg {
         gap: 6px;
         padding: 6px;
         margin-bottom: 12px;
+        margin-top: auto;
     }
 
     .cell {
@@ -1150,7 +1167,8 @@ body.in-game #menuBg {
 
     /* Exit Button */
     .small-exit-btn {
-        margin-top: 10px;
+        margin-top: auto;
+        margin-bottom: 5px;
         max-width: 180px !important;
         min-height: 45px !important;
         padding: 10px 20px !important;
