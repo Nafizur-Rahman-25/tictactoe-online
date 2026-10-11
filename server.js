@@ -6,6 +6,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
@@ -18,11 +19,44 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 const rooms = {};
+
 // ============================================
-// Player Counter (Total players who opened the game)
+// Player Counter - Persistent Storage
 // ============================================
+const COUNTER_FILE = path.join(__dirname, 'playerCount.json');
+
 let totalPlayers = 0;
-const playedSessions = new Set(); // To avoid counting the same person twice in same session
+
+// Load counter from file on startup
+function loadPlayerCount() {
+    try {
+        if (fs.existsSync(COUNTER_FILE)) {
+            const data = fs.readFileSync(COUNTER_FILE, 'utf8');
+            const parsed = JSON.parse(data);
+            totalPlayers = parsed.count || 0;
+            console.log(`📊 Loaded player count from file: ${totalPlayers}`);
+        } else {
+            totalPlayers = 0;
+            console.log(`📊 No counter file found, starting from 0`);
+        }
+    } catch (err) {
+        console.error('❌ Error loading player count:', err);
+        totalPlayers = 0;
+    }
+}
+
+// Save counter to file
+function savePlayerCount() {
+    try {
+        const data = JSON.stringify({ count: totalPlayers, lastUpdated: new Date().toISOString() });
+        fs.writeFileSync(COUNTER_FILE, data, 'utf8');
+    } catch (err) {
+        console.error('❌ Error saving player count:', err);
+    }
+}
+
+// Load on startup
+loadPlayerCount();
 
 function generateRoomId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -88,6 +122,7 @@ io.on('connection', (socket) => {
     // ---- Player Counter ----
     socket.on('registerPlayer', () => {
         totalPlayers++;
+        savePlayerCount(); // Save to file
         console.log(`🎮 Total players: ${totalPlayers}`);
         io.emit('playerCountUpdate', { count: totalPlayers });
     });
@@ -171,7 +206,6 @@ io.on('connection', (socket) => {
         room.guestName = data.name;
         console.log(`📝 Guest setup: ${data.name}`);
 
-        // Now both names are ready, start game
         if (room.hostName && room.guestName) {
             startGame(room, data.roomId);
         }
@@ -294,4 +328,5 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, () => {
     console.log(`🚀 Server started: http://localhost:${PORT}`);
+    console.log(`📊 Total players on startup: ${totalPlayers}`);
 });
