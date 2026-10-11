@@ -13,10 +13,11 @@
 
     <canvas id="bgCanvas"></canvas>
 
-    <video id="menuBg" autoplay muted loop playsinline webkit-playsinline preload="auto">
+    <!-- Background Videos - Preload in background, no autoplay -->
+    <video id="menuBg" muted loop playsinline webkit-playsinline preload="none" style="display:none;">
         <source src="interface.mp4" type="video/mp4">
     </video>
-    <video id="gameBg" autoplay muted loop playsinline webkit-playsinline preload="auto">
+    <video id="gameBg" muted loop playsinline webkit-playsinline preload="none" style="display:none;">
         <source src="gameplay.mp4" type="video/mp4">
     </video>
 

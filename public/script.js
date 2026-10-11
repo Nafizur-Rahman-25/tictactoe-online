@@ -748,6 +748,15 @@ function stopFireworks(canvasId) {
     window.addEventListener('resize', resize);
 
     // ============================================
+    // PRIORITY: Start animation immediately
+    // ============================================
+    // Force context settings for smooth animation
+    ctx.imageSmoothingEnabled = false;
+
+    // Log to verify animation is running
+    console.log('✅ Background animation started at:', new Date().toLocaleTimeString());
+
+    // ============================================
     // 1. Sakura Petals
     // ============================================
     const petals = [];
@@ -837,7 +846,7 @@ function stopFireworks(canvasId) {
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fillStyle = star.color;
         ctx.globalAlpha = Math.max(0.1, Math.min(0.9, pulsingAlpha));
-         ctx.shadowBlur = isMobile ? 5 : 10;
+        ctx.shadowBlur = isMobile ? 5 : 10;
         ctx.shadowColor = star.color;
         ctx.fill();
     }
@@ -1035,8 +1044,27 @@ function initVideos() {
     if (gameBg) gameBg.play().catch(() => { });
 }
 
+// Load videos AFTER animations are running (PC only)
 window.addEventListener('load', () => {
-    setTimeout(initVideos, 500);
+    if (isMobile) return; // Skip on mobile
+
+    // Wait 2 seconds - let animation settle first
+    setTimeout(() => {
+        const menuBg = document.getElementById('menuBg');
+        const gameBg = document.getElementById('gameBg');
+
+        if (menuBg) {
+            menuBg.style.display = 'block';
+            menuBg.preload = 'auto';
+            menuBg.load();
+            menuBg.play().catch(() => { });
+        }
+        if (gameBg) {
+            gameBg.style.display = 'block';
+            gameBg.preload = 'auto';
+            gameBg.load();
+        }
+    }, 2000); // 2 second delay
 });
 
 // First user interaction (PC only)
