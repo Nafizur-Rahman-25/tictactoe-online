@@ -6,7 +6,6 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
@@ -19,11 +18,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 const rooms = {};
-
-// ============================================
-// Player Counter - Persistent Storage
-// ============================================
-
 
 function generateRoomId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -85,12 +79,6 @@ function startGame(room, roomId) {
 
 io.on('connection', (socket) => {
     console.log('✅ New client connected:', socket.id);
-
-
-
-    // Send current count to the newly connected player
-    socket.emit('playerCountUpdate', { count: totalPlayers });
-
 
     // ---- Host Game (with name + rounds from start) ----
     socket.on('hostGame', (data) => {
@@ -291,3 +279,4 @@ server.listen(PORT, () => {
     console.log(`🚀 Server started: http://localhost:${PORT}`);
     
 });
+
