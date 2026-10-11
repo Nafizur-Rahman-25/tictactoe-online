@@ -976,43 +976,6 @@ body.in-game #menuBg {
     margin: 8px 0 !important;
 }
 
-/* ============================================ */
-/* Player Counter */
-/* ============================================ */
-.player-counter {
-    margin-top: 20px;
-    padding: 12px 25px;
-    background-color: rgba(25, 30, 50, 0.85);
-    border: 2px solid var(--accent-o);
-    border-radius: 30px;
-    font-family: 'Arial', sans-serif !important;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--accent-o);
-    letter-spacing: 2px;
-    box-shadow: 0 0 20px rgba(80, 200, 255, 0.3);
-    animation: counterPulse 3s ease-in-out infinite;
-}
-
-.player-counter #playerCount {
-    color: var(--gold);
-    font-weight: bold;
-    font-size: 1.4rem;
-    text-shadow: 0 0 10px var(--gold);
-    font-family: 'Arial', sans-serif !important;
-}
-
-@keyframes counterPulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 20px rgba(80, 200, 255, 0.3);
-    }
-
-    50% {
-        box-shadow: 0 0 30px rgba(80, 200, 255, 0.6);
-    }
-}
 
 /* ============================================ */
 /* Mobile - Single Media Query */

@@ -72,8 +72,7 @@ function stopAllMusic() {
 // ============================================
 socket.on('connect', () => {
     console.log('✅ Connected:', socket.id);
-    // Register player for count
-    socket.emit('registerPlayer');
+
     const el = document.getElementById('connectionStatus');
     if (el) {
         el.textContent = '✅ Connected';
@@ -94,12 +93,7 @@ socket.on('disconnect', () => {
 // ============================================
 // Player Counter Update
 // ============================================
-socket.on('playerCountUpdate', (data) => {
-    const counterEl = document.getElementById('playerCount');
-    if (counterEl) {
-        counterEl.textContent = data.count;
-    }
-});
+
 
 // ============================================
 // Screen Navigation
