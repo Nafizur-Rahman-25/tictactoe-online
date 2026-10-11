@@ -65,6 +65,9 @@ body {
     pointer-events: none;
 }
 
+/* ============================================ */
+/* Background Videos - PC only, mobile shows static image */
+/* ============================================ */
 #menuBg,
 #gameBg {
     position: fixed;
@@ -79,7 +82,7 @@ body {
     transform: translate(-50%, -50%) scale(1.05);
     z-index: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.5s ease;
 }
 
 #menuBg {
@@ -92,11 +95,17 @@ body {
     filter: brightness(0.55);
 }
 
-body.in-menu #menuBg {
+/* Default: menu video (splash screen-এও) */
+body #menuBg {
     opacity: 0.85;
 }
 
-body.in-menu #gameBg {
+body #gameBg {
+    opacity: 0;
+}
+
+/* In game screen */
+body.in-game #menuBg {
     opacity: 0;
 }
 
@@ -104,7 +113,12 @@ body.in-game #gameBg {
     opacity: 0.85;
 }
 
-body.in-game #menuBg {
+/* In menu */
+body.in-menu #menuBg {
+    opacity: 0.85;
+}
+
+body.in-menu #gameBg {
     opacity: 0;
 }
 
@@ -992,11 +1006,24 @@ body.in-game #menuBg {
         padding: 15px;
     }
 
-    /* Background Videos - DISABLED on mobile for performance */
+    /* Background Videos - Mobile-এ static first frame দেখাবে */
     #menuBg,
     #gameBg {
-        display: none !important;
-        visibility: hidden !important;
+        opacity: 0.85 !important;
+        filter: brightness(0.55) !important;
+        /* Video paused থাকবে — প্রথম frame background-এ থাকবে */
+    }
+
+    /* Mobile-এ menuBg কে বড় করে background-এ দেখাবে */
+    body #menuBg,
+    body.in-menu #menuBg,
+    body.in-game #menuBg {
+        opacity: 0.85 !important;
+    }
+
+    body #gameBg,
+    body.in-menu #gameBg,
+    body.in-game #gameBg {
         opacity: 0 !important;
     }
 

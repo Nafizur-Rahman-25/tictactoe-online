@@ -995,9 +995,120 @@ function stopFireworks(canvasId) {
 
 
 // ============================================
-// Mobile Performance: Pause videos when tab is hidden
+// Background Videos Control
+// PC: Play videos in loop continuously
+// Mobile: Pause on first frame (static image effect)
 // ============================================
+let videosReady = false;
+
+function initVideos() {
+    const menuBg = document.getElementById('menuBg');
+    const gameBg = document.getElementById('gameBg');
+
+    if (!menuBg || !gameBg) return;
+
+    // Common settings for both videos
+    [menuBg, gameBg].forEach(video => {
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = 'auto';
+    });
+
+    if (isMobile) {
+        // ============================================
+        // MOBILE: Static image (first frame only)
+        // ============================================
+        console.log('📱 Mobile mode: Videos paused as static images');
+
+        // Load video metadata but don't play
+        menuBg.addEventListener('loadeddata', () => {
+            menuBg.pause();
+            menuBg.currentTime = 0;
+        }, { once: true });
+
+        gameBg.addEventListener('loadeddata', () => {
+            gameBg.pause();
+            gameBg.currentTime = 0;
+        }, { once: true });
+
+        // Force load
+        menuBg.load();
+        gameBg.load();
+
+        // Make sure they stay paused
+        menuBg.pause();
+        gameBg.pause();
+    } else {
+        // ============================================
+        // PC: Play videos continuously in loop
+        // ============================================
+        console.log('💻 PC mode: Videos will play continuously');
+
+        // Start menu video
+        menuBg.play().then(() => {
+            console.log('✅ Menu video playing');
+        }).catch(err => {
+            console.log('⚠️ Menu video autoplay blocked:', err.message);
+        });
+
+        // Game video will play when we switch screens
+    }
+
+    videosReady = true;
+}
+
+// Switch video when screen changes (PC only)
+function switchVideoForScreen(screenId) {
+    if (!videosReady) return;
+
+    const menuBg = document.getElementById('menuBg');
+    const gameBg = document.getElementById('gameBg');
+    if (!menuBg || !gameBg) return;
+
+    const inGame = (
+        screenId === 'screen-game' ||
+        screenId === 'screen-round-over' ||
+        screenId === 'screen-match-over'
+    );
+
+    // Body classes always update (for CSS)
+    if (inGame) {
+        document.body.classList.add('in-game');
+        document.body.classList.remove('in-menu');
+    } else {
+        document.body.classList.add('in-menu');
+        document.body.classList.remove('in-game');
+    }
+
+    // On mobile, video never plays
+    if (isMobile) return;
+
+    // PC: Switch videos
+    if (inGame) {
+        menuBg.pause();
+        if (gameBg.paused) {
+            gameBg.play().catch(() => {});
+        }
+    } else {
+        gameBg.pause();
+        if (menuBg.paused) {
+            menuBg.play().catch(() => {});
+        }
+    }
+}
+
+// Hook into showScreen to also switch videos
+const _originalShowScreen = showScreen;
+window.showScreen = function (id) {
+    _originalShowScreen(id);
+    switchVideoForScreen(id);
+};
+
+// PC: Pause videos when tab is hidden (save CPU)
 document.addEventListener('visibilitychange', () => {
+    if (isMobile || !videosReady) return;
+
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
 
@@ -1005,82 +1116,50 @@ document.addEventListener('visibilitychange', () => {
         if (menuBg) menuBg.pause();
         if (gameBg) gameBg.pause();
     } else {
-        if (menuBg && !document.body.classList.contains('in-game')) {
-            menuBg.play().catch(() => { });
-        }
-        if (gameBg && document.body.classList.contains('in-game')) {
-            gameBg.play().catch(() => { });
+        // Resume correct video based on current screen
+        const activeScreen = document.querySelector('.screen.active');
+        if (activeScreen) {
+            switchVideoForScreen(activeScreen.id);
         }
     }
 });
 
-// ============================================
-// Video Autoplay Fallback (PC Only - Disabled on Mobile)
-// ============================================
-function initVideos() {
-    // Skip on mobile - videos are disabled
-    if (isMobile) {
-        console.log('📱 Videos disabled on mobile - using Canvas animation only');
-        return;
-    }
+// PC: Retry play on user interaction (browser autoplay policy)
+function retryVideoPlay() {
+    if (isMobile || !videosReady) return;
+
+    const activeScreen = document.querySelector('.screen.active');
+    if (!activeScreen) return;
+
+    const inGame = (
+        activeScreen.id === 'screen-game' ||
+        activeScreen.id === 'screen-round-over' ||
+        activeScreen.id === 'screen-match-over'
+    );
 
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
 
-    [menuBg, gameBg].forEach(video => {
-        if (!video) return;
-        video.muted = true;
-        video.loop = true;
-        video.playsInline = true;
-    });
-
-    if (menuBg) menuBg.play().catch(() => { });
-    if (gameBg) gameBg.play().catch(() => { });
+    if (inGame) {
+        if (gameBg && gameBg.paused) gameBg.play().catch(() => {});
+    } else {
+        if (menuBg && menuBg.paused) menuBg.play().catch(() => {});
+    }
 }
 
-// Load videos AFTER animations are running (PC only)
+document.addEventListener('click', retryVideoPlay);
+document.addEventListener('touchstart', retryVideoPlay);
+document.addEventListener('keydown', retryVideoPlay);
+
+// Initialize videos on page load
 window.addEventListener('load', () => {
-    if (isMobile) return; // Skip on mobile
-
-    // Wait 2 seconds - let animation settle first
+    // Small delay to let canvas animation start first
     setTimeout(() => {
-        const menuBg = document.getElementById('menuBg');
-        const gameBg = document.getElementById('gameBg');
-
-        if (menuBg) {
-            menuBg.style.display = 'block';
-            menuBg.preload = 'auto';
-            menuBg.load();
-            menuBg.play().catch(() => { });
+        initVideos();
+        // Set correct body class based on active screen
+        const activeScreen = document.querySelector('.screen.active');
+        if (activeScreen) {
+            switchVideoForScreen(activeScreen.id);
         }
-        if (gameBg) {
-            gameBg.style.display = 'block';
-            gameBg.preload = 'auto';
-            gameBg.load();
-        }
-    }, 2000); // 2 second delay
+    }, 500);
 });
-
-// First user interaction (PC only)
-document.addEventListener('touchstart', () => {
-    if (isMobile) return;
-    const menuBg = document.getElementById('menuBg');
-    const gameBg = document.getElementById('gameBg');
-    if (menuBg) menuBg.play().catch(() => { });
-    if (gameBg) gameBg.play().catch(() => { });
-}, { once: true });
-
-document.addEventListener('click', () => {
-    if (isMobile) return;
-    const menuBg = document.getElementById('menuBg');
-    const gameBg = document.getElementById('gameBg');
-    if (menuBg) menuBg.play().catch(() => { });
-    if (gameBg) gameBg.play().catch(() => { });
-}, { once: true });
-
-document.addEventListener('click', () => {
-    const menuBg = document.getElementById('menuBg');
-    const gameBg = document.getElementById('gameBg');
-    if (menuBg) menuBg.play().catch(() => { });
-    if (gameBg) gameBg.play().catch(() => { });
-}, { once: true });
