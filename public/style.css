@@ -1021,7 +1021,7 @@ body.in-menu #gameBg {
     body,
     body.in-menu,
     body.in-splash {
-        background-image: url('fireboy.jpg') !important;
+        background-image: url('fireboy.jpeg') !important;
         background-size: cover !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
@@ -1030,7 +1030,7 @@ body.in-menu #gameBg {
 
     /* Game screen-এ গেলে ice girl image */
     body.in-game {
-        background-image: url('icegirl.jpg') !important;
+        background-image: url('icegirl.jpeg') !important;
         background-size: cover !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
