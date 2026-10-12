@@ -1006,19 +1006,48 @@ body.in-menu #gameBg {
         padding: 15px;
     }
 
-    /* Background Videos - Mobile-এ static first frame দেখাবে */
+    /* ============================================ */
+    /* Mobile Backgrounds - Static Images          */
+    /* Menu = Fire Boy, Game = Ice Girl           */
+    /* ============================================ */
+
+    /* Mobile-এ video একেবারে লুকিয়ে ফেলি */
     #menuBg,
     #gameBg {
-        opacity: 0.85 !important;
-        filter: brightness(0.55) !important;
-        /* Video paused থাকবে — প্রথম frame background-এ থাকবে */
+        display: none !important;
     }
 
-    /* Mobile-এ menuBg কে বড় করে background-এ দেখাবে */
-    body #menuBg,
-    body.in-menu #menuBg,
-    body.in-game #menuBg {
-        opacity: 0.85 !important;
+    /* Mobile-এ body-র background হবে fire boy image */
+    body,
+    body.in-menu,
+    body.in-splash {
+        background-image: url('fireboy.jpg') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+    }
+
+    /* Game screen-এ গেলে ice girl image */
+    body.in-game {
+        background-image: url('icegirl.jpg') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+    }
+
+    /* Mobile-এ gradient animation বন্ধ */
+    @keyframes gradientShift {
+
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
     }
 
     body #gameBg,
