@@ -91,11 +91,6 @@ socket.on('disconnect', () => {
 });
 
 // ============================================
-// Player Counter Update
-// ============================================
-
-
-// ============================================
 // Screen Navigation
 // ============================================
 function showScreen(id) {
@@ -647,7 +642,7 @@ function updateGameUI() {
 }
 
 // ============================================
-// Fireworks (with mobile optimization)
+// Fireworks
 // ============================================
 let fireworksAnims = {};
 
@@ -668,10 +663,8 @@ function startFireworks(canvasId) {
     let lastSpawn = 0;
     const colors = ['#ff5078', '#50c8ff', '#64ff96', '#ffd700', '#ff8c42', '#ff69b4', '#87ceeb', '#ee82ee'];
 
-    // More particles on mobile now (video is off) - celebration effect
     const spawnCount = isMobile ? 12 : 25;
     const spawnInterval = isMobile ? 800 : 500;
-
 
     function spawn() {
         const x = Math.random() * canvas.width;
@@ -741,13 +734,7 @@ function stopFireworks(canvasId) {
     resize();
     window.addEventListener('resize', resize);
 
-    // ============================================
-    // PRIORITY: Start animation immediately
-    // ============================================
-    // Force context settings for smooth animation
     ctx.imageSmoothingEnabled = false;
-
-    // Log to verify animation is running
     console.log('✅ Background animation started at:', new Date().toLocaleTimeString());
 
     // ============================================
@@ -804,7 +791,7 @@ function stopFireworks(canvasId) {
     }
 
     // ============================================
-    // 2. Stars (Glowing dots)
+    // 2. Stars
     // ============================================
     const stars = [];
     const numStars = isMobile ? 25 : 40;
@@ -846,21 +833,21 @@ function stopFireworks(canvasId) {
     }
 
     // ============================================
-    // 3. Shooting Stars (উল্কা)
+    // 3. Shooting Stars
     // ============================================
     const shootingStars = [];
     const maxShootingStars = isMobile ? 1 : 3;
 
     function spawnShootingStar() {
         if (shootingStars.length >= maxShootingStars) return;
-        if (Math.random() > 0.02) return; // Rare spawn
+        if (Math.random() > 0.02) return;
 
         shootingStars.push({
             x: Math.random() * canvas.width,
             y: -50,
             length: 80 + Math.random() * 100,
             speed: 8 + Math.random() * 6,
-            angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3, // 45 degree
+            angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
             life: 1.0,
             color: Math.random() > 0.5 ? '#50c8ff' : '#ffffff'
         });
@@ -882,7 +869,6 @@ function stopFireworks(canvasId) {
         ctx.lineTo(endX, endY);
         ctx.stroke();
 
-        // Bright head
         ctx.beginPath();
         ctx.arc(s.x, s.y, 3, 0, Math.PI * 2);
         ctx.fillStyle = s.color;
@@ -905,7 +891,7 @@ function stopFireworks(canvasId) {
     }
 
     // ============================================
-    // 4. Glowing Orbs (বড় আলোকিত গোলক)
+    // 4. Glowing Orbs
     // ============================================
     const orbs = [];
     const numOrbs = isMobile ? 2 : 6;
@@ -934,7 +920,6 @@ function stopFireworks(canvasId) {
         orb.x += orb.speedX;
         orb.y += orb.speedY;
 
-        // Wrap around
         if (orb.x < -orb.radius) orb.x = canvas.width + orb.radius;
         if (orb.x > canvas.width + orb.radius) orb.x = -orb.radius;
         if (orb.y < -orb.radius) orb.y = canvas.height + orb.radius;
@@ -961,20 +946,15 @@ function stopFireworks(canvasId) {
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Layer 1: Glowing Orbs (background)
         orbs.forEach(orb => drawOrb(orb));
-
-        // Layer 2: Stars
         stars.forEach(star => drawStar(star));
         ctx.shadowBlur = 0;
         ctx.globalAlpha = 1;
 
-        // Layer 3: Shooting Stars (update + draw)
         spawnShootingStar();
         updateShootingStars();
         shootingStars.forEach(s => drawShootingStar(s));
 
-        // Layer 4: Sakura Petals (foreground)
         petals.forEach(p => {
             p.y += p.speedY;
             p.swayPhase += p.swaySpeed;
@@ -996,8 +976,8 @@ function stopFireworks(canvasId) {
 
 // ============================================
 // Background Videos Control
-// PC: Play videos in loop continuously
-// Mobile: Pause on first frame (static image effect)
+// PC: Play videos in loop continuously (FORCED)
+// Mobile: Static image (video hidden)
 // ============================================
 let videosReady = false;
 
@@ -1005,62 +985,61 @@ function initVideos() {
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
 
-    if (!menuBg || !gameBg) return;
+    if (!menuBg || !gameBg) {
+        console.log('⚠️ Video elements not found');
+        return;
+    }
 
-    // Common settings for both videos
     [menuBg, gameBg].forEach(video => {
         video.muted = true;
         video.loop = true;
         video.playsInline = true;
+        video.autoplay = true;
         video.preload = 'auto';
+        video.volume = 0;
     });
 
     if (isMobile) {
-        // ============================================
-        // MOBILE: Static image (first frame only)
-        // ============================================
-        console.log('📱 Mobile mode: Videos paused as static images');
-
-        // Load video metadata but don't play
-        menuBg.addEventListener('loadeddata', () => {
-            menuBg.pause();
-            menuBg.currentTime = 0;
-        }, { once: true });
-
-        gameBg.addEventListener('loadeddata', () => {
-            gameBg.pause();
-            gameBg.currentTime = 0;
-        }, { once: true });
-
-        // Force load
-        menuBg.load();
-        gameBg.load();
-
-        // Make sure they stay paused
-        menuBg.pause();
-        gameBg.pause();
-    } else {
-        // ============================================
-        // PC: Play videos continuously in loop
-        // ============================================
-        console.log('💻 PC mode: Videos will play continuously');
-
-        // Start menu video
-        menuBg.play().then(() => {
-            console.log('✅ Menu video playing');
-        }).catch(err => {
-            console.log('⚠️ Menu video autoplay blocked:', err.message);
-        });
-
-        // Game video will play when we switch screens
+        console.log('📱 Mobile mode: Videos hidden');
+        menuBg.style.display = 'none';
+        gameBg.style.display = 'none';
+        videosReady = true;
+        return;
     }
+
+    console.log('💻 PC mode: Forcing videos to play');
+
+    menuBg.style.display = 'block';
+    gameBg.style.display = 'block';
+
+    menuBg.load();
+    gameBg.load();
+
+    function forcePlay(video, name) {
+        if (!video) return;
+        video.muted = true;
+        video.volume = 0;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log(`✅ ${name} video playing`);
+            }).catch(err => {
+                console.log(`⚠️ ${name} video blocked: ${err.message}`);
+                setTimeout(() => {
+                    video.play().catch(() => {});
+                }, 500);
+            });
+        }
+    }
+
+    forcePlay(menuBg, 'Menu');
+    gameBg.pause();
 
     videosReady = true;
 }
 
-// Switch video when screen changes (PC only)
 function switchVideoForScreen(screenId) {
-    if (!videosReady) return;
+    if (!videosReady || isMobile) return;
 
     const menuBg = document.getElementById('menuBg');
     const gameBg = document.getElementById('gameBg');
@@ -1072,7 +1051,6 @@ function switchVideoForScreen(screenId) {
         screenId === 'screen-match-over'
     );
 
-    // Body classes always update (for CSS)
     if (inGame) {
         document.body.classList.add('in-game');
         document.body.classList.remove('in-menu');
@@ -1081,31 +1059,29 @@ function switchVideoForScreen(screenId) {
         document.body.classList.remove('in-game');
     }
 
-    // On mobile, video never plays
-    if (isMobile) return;
-
-    // PC: Switch videos
     if (inGame) {
         menuBg.pause();
-        if (gameBg.paused) {
-            gameBg.play().catch(() => {});
-        }
+        gameBg.muted = true;
+        gameBg.volume = 0;
+        gameBg.play().catch(() => {
+            setTimeout(() => gameBg.play().catch(() => {}), 300);
+        });
     } else {
         gameBg.pause();
-        if (menuBg.paused) {
-            menuBg.play().catch(() => {});
-        }
+        menuBg.muted = true;
+        menuBg.volume = 0;
+        menuBg.play().catch(() => {
+            setTimeout(() => menuBg.play().catch(() => {}), 300);
+        });
     }
 }
 
-// Hook into showScreen to also switch videos
 const _originalShowScreen = showScreen;
 window.showScreen = function (id) {
     _originalShowScreen(id);
     switchVideoForScreen(id);
 };
 
-// PC: Pause videos when tab is hidden (save CPU)
 document.addEventListener('visibilitychange', () => {
     if (isMobile || !videosReady) return;
 
@@ -1116,7 +1092,6 @@ document.addEventListener('visibilitychange', () => {
         if (menuBg) menuBg.pause();
         if (gameBg) gameBg.pause();
     } else {
-        // Resume correct video based on current screen
         const activeScreen = document.querySelector('.screen.active');
         if (activeScreen) {
             switchVideoForScreen(activeScreen.id);
@@ -1124,9 +1099,46 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-// PC: Retry play on user interaction (browser autoplay policy)
 function retryVideoPlay() {
     if (isMobile || !videosReady) return;
+
+    const activeScreen = document.querySelector('.screen.active');
+    if (!activeScreen) return;
+
+    const inGame = (
+        activeScreen.id === 'screen-game' ||
+        activeScreen.id === 'screen-round-over' ||
+        activeScreen.id === 'screen-match-over'
+    );
+
+    const menuBg = document.getElementById('menuBg');
+    const gameBg = document.getElementById('gameBg');
+
+    if (inGame) {
+        if (gameBg && gameBg.paused) {
+            gameBg.muted = true;
+            gameBg.volume = 0;
+            gameBg.play().catch(() => {});
+        }
+    } else {
+        if (menuBg && menuBg.paused) {
+            menuBg.muted = true;
+            menuBg.volume = 0;
+            menuBg.play().catch(() => {});
+        }
+    }
+}
+
+document.addEventListener('click', retryVideoPlay);
+document.addEventListener('touchstart', retryVideoPlay);
+document.addEventListener('keydown', retryVideoPlay);
+document.addEventListener('mousemove', retryVideoPlay, { once: true });
+document.addEventListener('scroll', retryVideoPlay, { once: true });
+
+// Every 3 sec check if video paused and resume
+setInterval(() => {
+    if (isMobile || !videosReady) return;
+    if (document.hidden) return;
 
     const activeScreen = document.querySelector('.screen.active');
     if (!activeScreen) return;
@@ -1145,21 +1157,22 @@ function retryVideoPlay() {
     } else {
         if (menuBg && menuBg.paused) menuBg.play().catch(() => {});
     }
-}
+}, 3000);
 
-document.addEventListener('click', retryVideoPlay);
-document.addEventListener('touchstart', retryVideoPlay);
-document.addEventListener('keydown', retryVideoPlay);
-
-// Initialize videos on page load
 window.addEventListener('load', () => {
-    // Small delay to let canvas animation start first
     setTimeout(() => {
         initVideos();
-        // Set correct body class based on active screen
         const activeScreen = document.querySelector('.screen.active');
         if (activeScreen) {
             switchVideoForScreen(activeScreen.id);
         }
     }, 500);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!isMobile) {
+        setTimeout(() => {
+            initVideos();
+        }, 100);
+    }
 });
